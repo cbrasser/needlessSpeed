@@ -5,7 +5,6 @@
 *.slo
 *.lo
 *.o
-*.obj
 
 # Precompiled Headers
 *.gch
@@ -71,3 +70,8 @@ bRenderer_ios.xcodeproj/
 /bRenderer.sln/
 bRenderer.sln/*
 bRenderer.sln/
+
+/windows/*
+/windows/
+windows/*
+windows/
