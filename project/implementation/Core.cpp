@@ -59,7 +59,7 @@ void Core::init()
 	if (Input::isTouchDevice())
 		bRenderer().initRenderer(true);										// full screen on iOS
 	else
-		bRenderer().initRenderer(1600, 900, false, "ASTEROIDS 3D");		// windowed mode on desktop
+		bRenderer().initRenderer(1600, 900, false, "needless speed");		// windowed mode on desktop
 																			//bRenderer().initRenderer(View::getScreenWidth(), View::getScreenHeight(), true);		// full screen using full width and height of the screen
 
 	// start main loop 

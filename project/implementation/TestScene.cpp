@@ -35,6 +35,12 @@ public:
 		Car->addComponent<CarRenderer>();
 		Car->addComponent<MoveScript>();
 
+		GameObject *Tree = instanciate("Tree1");
+		Tree -> addComponent<TreRenderer>();
+
+		GameObject *Tree2 = instanciate("Tree2");
+		Tree -> addComponent<TreRenderer>();
+
 		GameObject *Track = instanciate("Track");
 		Track->addComponent<TrackRenderer>();
 
