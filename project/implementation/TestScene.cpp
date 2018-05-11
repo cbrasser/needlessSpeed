@@ -7,7 +7,6 @@
 #include "Logic.h"
 #include "CarRenderer.cpp"
 #include "TrackRenderer.cpp"
-#include "ShipRenderer.cpp"
 #include "MoveScript.cpp"
 #include "Physics.h"
 #include "FreeCameraScript.cpp"
@@ -15,14 +14,10 @@
 #include "SphereCollider.cpp"
 #include "ShipScript.cpp"
 #include "MoveScript.cpp"
-#include "CubeRenderer.cpp"
-#include "ParticleSystemRenderer.cpp"
-#include "ParticleSystem.h"
-#include "LaserRenderer.cpp"
-#include "FlareRenderer.cpp"
 #include "LaserManager.cpp"
 #include "LaserScript.cpp"
 #include "StickToFrontScript.cpp"
+#include "TreeRenderer.cpp"
 
 class TestScene : public Scene {
 public:
@@ -43,6 +38,9 @@ public:
 
 		GameObject *Track = instanciate("Track");
 		Track->addComponent<TrackRenderer>();
+
+		GameObject *Tree = instanciate("Tree");
+		Tree->addComponent<TreeRenderer>();
 
 		GameObject *Camera = instanciate("Camera");
 		Camera->addComponent<FreeCameraScript>();	

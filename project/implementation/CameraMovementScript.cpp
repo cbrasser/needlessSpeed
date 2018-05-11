@@ -95,7 +95,7 @@ public:
             
             // up vs down
             // adjust the initial roll so that the "zero" is set to 1 rad instead of 0 (completely horizontal)
-            roll = TheRenderer::Instance()->renderer->getInput()->getGyroscopeRoll() + M_PI_4;
+			roll = TheRenderer::Instance()->renderer->getInput()->getGyroscopeRoll() + 3.14159265359f; //M_PI_4;
             
             if (pitch != newPitch){
                 // positive pitch if on landscape mode the pysical button of the ipad is on the right (our default orientation)

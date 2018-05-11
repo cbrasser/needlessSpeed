@@ -1,4 +1,3 @@
-#version 130
 
 uniform mediump mat4 ViewMatrix;
 uniform mediump mat4 ModelMatrix;
@@ -10,6 +9,7 @@ uniform mediump vec4 LightPos;
 uniform mediump vec4 EyePos;
 
 uniform mediump float DayNightPulse;
+uniform mediump vec3 LightDirection;
 
 attribute vec4 Position;
 attribute vec3 Normal;
@@ -24,6 +24,7 @@ varying mediump vec3 normalVarying;     // normal in world space
 varying mediump vec3 tangentVarying;    // tangent in world space
 
 varying mediump float DayNightPulseVarying; // Value for the day and night cycle
+varying mediump vec3 LightDirectionVarying; // Value for the direction light
 
 void main()
 {
@@ -33,6 +34,7 @@ void main()
     texCoordVarying = TexCoord;
 
     DayNightPulseVarying = DayNightPulse;
+    LightDirectionVarying = LightDirection;
     
     gl_Position = ProjectionMatrix * ViewMatrix * posVarying;
 }

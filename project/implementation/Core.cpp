@@ -22,8 +22,6 @@ int asteroidAmount = 30;
 
 float acceleration = 0.f;
 float turning = 0.f;
-float pi = 3.1414f;
-float frequency = 2.0f;
 float _cameraSpeed = 2.0f;
 float translationSpeed = 0.2f;
 float translationOffset = 0.4f;
@@ -32,6 +30,13 @@ float accelerationFactor = 1.0f;
 float brakeFactor = -1.0f;
 vmml::Vector3f position = vmml::Vector3f(0,0,0);
 vmml::Vector3f velocity = vmml::Vector3f(0,0,0);
+
+float pi = 3.1414f;
+float frequency = 3.0f;
+GLfloat dayNightPulse = 0.0f;
+vmml::Vector3f lightDirection = vmml::Vector3f(1.f, 1.f, 1.f);
+GLfloat directionFloat = 0.0f;
+GLfloat treeAnimation = 0.0f;
 
 bool isDebug = false;
 bool doPostProcessing = true;
@@ -59,6 +64,7 @@ void Core::init()
 	if (Input::isTouchDevice())
 		bRenderer().initRenderer(true);										// full screen on iOS
 	else
+
 		bRenderer().initRenderer(1600, 900, false, "needless speed");		// windowed mode on desktop
 																			//bRenderer().initRenderer(View::getScreenWidth(), View::getScreenHeight(), true);		// full screen using full width and height of the screen
 
@@ -143,7 +149,7 @@ void Core::terminateFunction()
 	Physics::destroy();
 	SceneManager::destroy();
 
-	bRenderer::log("I fucked shit up");
+	bRenderer::log("(EX)TERMINATE");
 }
 
 
