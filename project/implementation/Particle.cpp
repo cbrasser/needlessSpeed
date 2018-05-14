@@ -2,12 +2,13 @@
 
 
 Particle::Particle() {
-	timeToLive = 20 + (rand()%20);
-	velocity = 1 + 0.1*(rand() % 10);
-	size = 1;
+	timeToLive = 20 + (rand() % 40);
+	velocity = 1; 
 	position = vmml::Vector3f(0, 0, 0);
 	direction = Particle::newDirection();
-	isAlive = false;
+	isAlive = true;
+	randomScale = 0.01f * (rand() % 100);
+	size = 0.005f;
 };
 
 vmml::Vector3f  Particle::newDirection() {
@@ -16,4 +17,14 @@ vmml::Vector3f  Particle::newDirection() {
 		((rand() % 200) - 100),
 		((rand() % 200) - 100), 
 		((rand() % 200) - 100)));
+}
+
+void Particle::reset() { //Resets the values to their original
+	timeToLive = 20 + (rand() % 40);
+	velocity = 1;
+	position = vmml::Vector3f(0, 0, 0);
+	direction = Particle::newDirection();
+	isAlive = true;
+	randomScale = 0.01f * (rand() % 100);
+	size = 0.005f;
 }

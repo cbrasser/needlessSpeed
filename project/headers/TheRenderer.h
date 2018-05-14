@@ -21,6 +21,7 @@ public:
 		renderer = rend;
 	}
 	void init();
+	void renderShadows();
 	void render();
 	void destroy();
 	static TheRenderer* Instance();

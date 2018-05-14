@@ -28,7 +28,7 @@ public:
 		}
 	}
 
-	void render() override {
+	void render(std::string cameraName) override {
 		std::cout << "============render tree renderer=============" << std::endl;
 
 		vmml::Matrix4f modelMatrix = gameObject->getComponent<Transform>()->getTransformationMatrix();
@@ -36,7 +36,7 @@ public:
 		TexturePtr colorLUT = TheRenderer::Instance()->renderer->getObjects()->getTexture("colorLUT");
 
 		ShaderPtr shader = TheRenderer::Instance()->renderer->getObjects()->getShader("tree");
-		vmml::Matrix4f viewMatrix = TheRenderer::Instance()->renderer->getObjects()->getCamera("camera")->getViewMatrix();
+		vmml::Matrix4f viewMatrix = TheRenderer::Instance()->renderer->getObjects()->getCamera(cameraName)->getViewMatrix();
 
 		//Light Calculations
 		dayNightPulse = 0.5*(1 + cos(theTime.time / frequency));
@@ -66,7 +66,7 @@ public:
 			shader->setUniform("TreeAnimation", treeAnimation);
 		}
 		//TheRenderer::Instance()->renderer->getModelRenderer()->queueModelInstance("car", "car" + std::to_string(gameObject->getId()), "camera", modelMatrix, std::vector<std::string>({ "firstLight"}), false, false, false);
-		TheRenderer::Instance()->renderer->getModelRenderer()->drawModel("Tree", "camera", modelMatrix, std::vector<std::string>({}));
+		TheRenderer::Instance()->renderer->getModelRenderer()->drawModel("Tree", cameraName, modelMatrix, std::vector<std::string>({}));
 	}
 };
 

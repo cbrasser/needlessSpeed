@@ -29,7 +29,7 @@ public:
 
 	}
     
-	void render() override {
+	void render(std::string cameraName) override {
 		ShaderPtr crossShader = TheRenderer::Instance()->renderer->getObjects()->getShader("cross");
 
 		vmml::Matrix4f shipModelMatrix = gameObject->getComponent<Transform>()->getTransformationMatrix();
@@ -47,16 +47,16 @@ public:
         GameObject *Cam = SceneManager::getCurrentScene()->getObjectByName("Camera");
         pitchAngle = Cam->getComponent<CameraMovementScript>()->pitch;
         rollAngle = Cam->getComponent<CameraMovementScript>()->roll;
-        camForwardDirection = -TheRenderer::Instance()->renderer->getObjects()->getCamera("camera")->getForward();
-        camRightDirection = TheRenderer::Instance()->renderer->getObjects()->getCamera("camera")->getRight();
-        camUpDirection = TheRenderer::Instance()->renderer->getObjects()->getCamera("camera")->getUp();
+        camForwardDirection = -TheRenderer::Instance()->renderer->getObjects()->getCamera(cameraName)->getForward();
+        camRightDirection = TheRenderer::Instance()->renderer->getObjects()->getCamera(cameraName)->getRight();
+        camUpDirection = TheRenderer::Instance()->renderer->getObjects()->getCamera(cameraName)->getUp();
 
         vmml::Matrix4f pitchRotation = vmml::create_rotation(pitchAngle/2, camForwardDirection);
         
         vmml::Matrix4f rollRotation = vmml::create_rotation(rollAngle/2, camRightDirection);
         
-		vmml::Matrix4f view = TheRenderer::Instance()->renderer->getObjects()->getCamera("camera")->getViewMatrix();
-		vmml::Matrix4f projection = TheRenderer::Instance()->renderer->getObjects()->getCamera("camera")->getProjectionMatrix();
+		vmml::Matrix4f view = TheRenderer::Instance()->renderer->getObjects()->getCamera(cameraName)->getViewMatrix();
+		vmml::Matrix4f projection = TheRenderer::Instance()->renderer->getObjects()->getCamera(cameraName)->getProjectionMatrix();
 
         float distanceFactor= 1000.0;
         

@@ -18,6 +18,9 @@
 #include "LaserScript.cpp"
 #include "StickToFrontScript.cpp"
 #include "TreeRenderer.cpp"
+#include "CameraWrapper.cpp"
+#include "ParticleSystemRenderer.cpp"
+#include "ParticleSystem.h"
 
 class TestScene : public Scene {
 public:
@@ -36,9 +39,18 @@ public:
 		GameObject *Tree = instanciate("Tree");
 		Tree->addComponent<TreeRenderer>();
 
+		//Particles
+		GameObject *ParticleSystem = instanciate("ParticleSystem");
+		ParticleSystem->addComponent<ParticleSystemRenderer>();
+		ParticleSystem->getComponent<Transform>()->setPosition(vmml::Vector3f(0.f, 0.f, 0.f));
+		ParticleSystem->getComponent<ParticleSystemRenderer>()->init();
+
+		//Camera
 		GameObject *Camera = instanciate("Camera");
 		Camera->addComponent<FreeCameraScript>();	
 
+		//GameObject *ShadowCamera = instanciate("Camera");
+		//ShadowCamera->addComponent<FreeCameraScript>();
 	}
 };
 

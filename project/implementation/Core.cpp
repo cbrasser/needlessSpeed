@@ -100,7 +100,9 @@ void Core::initFunction()
 
     // Create camera before loading the space since its position is needed for the skybox
     bRenderer().getObjects()->createCamera("camera", vmml::Vector3f(0.f, -4.5f, 0.0f), vmml::Vector3f(-0.5f, 0.f, 0.f));
-    bRenderer().getObjects()->loadTexture("colorLUT.png");
+	bRenderer().getObjects()->createCamera("shadowCamera", vmml::Vector3f(0.f, -35.5f, 4.0f), vmml::Vector3f(-1.3f, 0.f, 0.f));
+
+	bRenderer().getObjects()->loadTexture("colorLUT.png");
     //bRenderer().getObjects()->createCamera("camera", vmml::Vector3f(0.0f, 0.0f, 10.0f), vmml::Vector3f(0.f, 0.0f, 0.f));
     
     // Create scenes
@@ -138,10 +140,11 @@ void Core::loopFunction(const double &deltaTime, const double &elapsedTime)
 	theTime.setTime(deltaTime, elapsedTime);
 
 	Logic::update();
+	//renderer.renderShadows();
 	renderer.render();
 }
 
-/* This function is executed when terminating the renderer */
+/* This function is executed when terminatingthe renderer */
 void Core::terminateFunction()
 {
 	Logic::destroy();

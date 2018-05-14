@@ -15,6 +15,7 @@ public:
 
 	Particle();
 	static vmml::Vector3f newDirection();
+	void reset();
 };
 
 #endif /* defined(PARTICLE_H) */

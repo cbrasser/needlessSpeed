@@ -43,23 +43,23 @@ public:
         }
     }
     
-    void render() override {
+	void render(std::string cameraName) override {
     
         vmml::Matrix4f modelMatrix = gameObject->getComponent<Transform>()->getTransformationMatrix();
         
-        vmml::Vector3f originalCamPos = TheRenderer::Instance()->renderer->getObjects()->getCamera("camera")->getPosition();
+        vmml::Vector3f originalCamPos = TheRenderer::Instance()->renderer->getObjects()->getCamera(cameraName)->getPosition();
         
         // Temporarily bring camera to origin
-        TheRenderer::Instance()->renderer->getObjects()->getCamera("camera")->setPosition(vmml::Vector3f(0.0f));
+        TheRenderer::Instance()->renderer->getObjects()->getCamera(cameraName)->setPosition(vmml::Vector3f(0.0f));
         
         // Update position of skybox as camera moves
-        gameObject->getComponent<Transform>()->setPosition(TheRenderer::Instance()->renderer->getObjects()->getCamera("camera")->getPosition());
+        gameObject->getComponent<Transform>()->setPosition(TheRenderer::Instance()->renderer->getObjects()->getCamera(cameraName)->getPosition());
 
         ShaderPtr shader = TheRenderer::Instance()->renderer->getObjects()->getShader("sky");
         
         // Keep the camera centered in the skybox by setting the last column of the view matrix to zero so that
         // the skybox can still rotate with the camera but it is not traslated anymore
-        vmml::Matrix4f view = TheRenderer::Instance()->renderer->getObjects()->getCamera("camera")->getViewMatrix();
+        vmml::Matrix4f view = TheRenderer::Instance()->renderer->getObjects()->getCamera(cameraName)->getViewMatrix();
         
         CubeMapPtr skybox = TheRenderer::Instance()->renderer->getObjects()->getCubeMap("skybox");
         
@@ -76,12 +76,12 @@ public:
         // Put skybox in the render queue
 
 		glDisable(GL_DEPTH_TEST);
-        TheRenderer::Instance()->renderer->getModelRenderer()->drawModel("cube", "camera", modelMatrix, std::vector<std::string>({}), false);
+        TheRenderer::Instance()->renderer->getModelRenderer()->drawModel("cube", cameraName, modelMatrix, std::vector<std::string>({}), false);
 		glEnable(GL_DEPTH_TEST);
         
         // After drawing the skybox, bring the camera back to its original position
         // Thanks to this camera "shifting", it's impossible to leave to skybox
-        TheRenderer::Instance()->renderer->getObjects()->getCamera("camera")->setPosition(originalCamPos);
+        TheRenderer::Instance()->renderer->getObjects()->getCamera(cameraName)->setPosition(originalCamPos);
     }
 };
 
