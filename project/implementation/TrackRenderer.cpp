@@ -19,11 +19,11 @@ public:
 	TheTime theTime;
 
 	void init() override {
-		if (TheRenderer::Instance()->renderer->getObjects()->getModel("track") == nullptr) {
+		if (TheRenderer::Instance()->renderer->getObjects()->getModel("Track") == nullptr) {
             std::cout << "============init track renderer=============" << std::endl;
             // Use flat shader
             ShaderPtr generalShader = TheRenderer::Instance()->renderer->getObjects()->loadShaderFile("general", 0, false, false, false, false, false);
-            TheRenderer::Instance()->renderer->getObjects()->loadObjModel("track.obj", false, true, generalShader, nullptr);
+            TheRenderer::Instance()->renderer->getObjects()->loadObjModel("Track.obj", false, true, generalShader, nullptr);
 		}
 	}
 
@@ -60,7 +60,7 @@ public:
 		shader->setUniform("DayNightPulse", dayNightPulse);
 	}
         //TheRenderer::Instance()->renderer->getModelRenderer()->queueModelInstance("car", "car" + std::to_string(gameObject->getId()), "camera", modelMatrix, std::vector<std::string>({ "firstLight"}), false, false, false);
-    	TheRenderer::Instance()->renderer->getModelRenderer()->drawModel("track", "camera", modelMatrix, std::vector<std::string>({ }));
+    	TheRenderer::Instance()->renderer->getModelRenderer()->drawModel("Track", "camera", modelMatrix, std::vector<std::string>({ }));
     }
 };
 

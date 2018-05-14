@@ -20,11 +20,11 @@ public:
 	TheTime theTime;
 
 	void init() override {
-		if (TheRenderer::Instance()->renderer->getObjects()->getModel("tree") == nullptr) {
+		if (TheRenderer::Instance()->renderer->getObjects()->getModel("Tree") == nullptr) {
 			std::cout << "============init tree renderer=============" << std::endl;
 			// Use flat shader
 			ShaderPtr treeShader = TheRenderer::Instance()->renderer->getObjects()->loadShaderFile("tree", 0, false, false, false, false, false);
-			TheRenderer::Instance()->renderer->getObjects()->loadObjModel("tree.obj", false, true, treeShader, nullptr);
+			TheRenderer::Instance()->renderer->getObjects()->loadObjModel("Tree.obj", false, true, treeShader, nullptr);
 		}
 	}
 
@@ -66,7 +66,7 @@ public:
 			shader->setUniform("TreeAnimation", treeAnimation);
 		}
 		//TheRenderer::Instance()->renderer->getModelRenderer()->queueModelInstance("car", "car" + std::to_string(gameObject->getId()), "camera", modelMatrix, std::vector<std::string>({ "firstLight"}), false, false, false);
-		TheRenderer::Instance()->renderer->getModelRenderer()->drawModel("tree", "camera", modelMatrix, std::vector<std::string>({}));
+		TheRenderer::Instance()->renderer->getModelRenderer()->drawModel("Tree", "camera", modelMatrix, std::vector<std::string>({}));
 	}
 };
 

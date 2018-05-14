@@ -20,11 +20,11 @@ public:
 	TheTime theTime;
 
 	void init() override {
-		if (TheRenderer::Instance()->renderer->getObjects()->getModel("car") == nullptr) {
+		if (TheRenderer::Instance()->renderer->getObjects()->getModel("Car") == nullptr) {
             std::cout << "============init car renderer=============" << std::endl;
             // Use flat shader
             ShaderPtr carShader = TheRenderer::Instance()->renderer->getObjects()->loadShaderFile("car", 0, false, false, false, false, false);
-            TheRenderer::Instance()->renderer->getObjects()->loadObjModel("car.obj", false, true, carShader, nullptr);
+            TheRenderer::Instance()->renderer->getObjects()->loadObjModel("Car.obj", false, true, carShader, nullptr);
 		}
 	}
 
@@ -60,7 +60,7 @@ public:
 		shader->setUniform("DayNightPulse", dayNightPulse);
 	}
         //TheRenderer::Instance()->renderer->getModelRenderer()->queueModelInstance("car", "car" + std::to_string(gameObject->getId()), "camera", modelMatrix, std::vector<std::string>({ "firstLight"}), false, false, false);
-    	TheRenderer::Instance()->renderer->getModelRenderer()->drawModel("car", "camera", modelMatrix, std::vector<std::string>({ }));
+    	TheRenderer::Instance()->renderer->getModelRenderer()->drawModel("Car", "camera", modelMatrix, std::vector<std::string>({ }));
     }
 };
 

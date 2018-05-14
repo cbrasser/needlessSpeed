@@ -1,3 +1,5 @@
+#version 130
+
 
 uniform mediump mat4 ViewMatrix;
 uniform mediump mat4 ModelMatrix;

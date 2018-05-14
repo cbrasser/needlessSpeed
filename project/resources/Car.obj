@@ -1,6 +1,6 @@
 # Blender v2.79 (sub 0) OBJ File: 'rallyCar.blend'
 # www.blender.org
-mtllib car.mtl
+mtllib Car.mtl
 o Full_Car_LowPoly_Untitled.003
 v 0.704044 0.966262 0.084473
 v 0.693603 0.943306 0.563726
