@@ -9,8 +9,6 @@
 #include "SceneManager.h"
 
 
-
-
 class MoveScript : public Behaviour{
 public: 
 	float acceleration = 0.0f;

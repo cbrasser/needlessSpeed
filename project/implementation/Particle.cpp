@@ -4,13 +4,13 @@
 
 
 Particle::Particle() {
-	timeToLive = 20 + (rand() % 40);
-	velocity = 1; 
+	timeToLive = 20 + (rand() % 40); 
 	position = vmml::Vector3f(0, 1, 0); //set first and last value to match car spawn point
 	direction = Particle::newDirection();
 	isAlive = true;
 	randomScale = 0.025f * (rand() % 100);
-	size = 0.04f;
+	size = 0.0f;
+	velocity = 0.f;
 };
 
 vmml::Vector3f  Particle::newDirection() {
@@ -22,14 +22,33 @@ vmml::Vector3f  Particle::newDirection() {
 }
 
 void Particle::reset() { //Resets the values to their original
+	tempPosition;
 	timeToLive = 20 + (rand() % 40);
 	velocity = 1;
-	position = SceneManager::getCurrentScene()->getObjectByName("Car")->transform->getPosition();
-	double carX = position[0];
-	double carY = position[2];
-	position = vmml::Vector3f(carX, 1, carY);
+	oldPosition = tempPosition;
+	tempPosition = SceneManager::getCurrentScene()->getObjectByName("Car")->transform->getPosition();
+	float velocity = calculateVelocity(oldPosition, tempPosition);
+	double carX = tempPosition[0];
+	double carY = tempPosition[2];
+	position = vmml::Vector3f(carX, 0.5, carY);
 	direction = Particle::newDirection();
 	isAlive = true;
 	randomScale = 0.025f * (rand() % 100);
-	size = 0.04f;
+	if (velocity >= 20.0f) {
+		velocity = 20.0f;
+	}
+	size = 0.08f * velocity;
 }
+
+float Particle::calculateVelocity(vmml::Vector3f oldPosition, vmml::Vector3f tempPosition) {
+	
+	vmml::Vector3f positionDifference = tempPosition - oldPosition;
+	float velocity = 0.0;
+	for (int i = 0; i < positionDifference.size(); i++) {
+		velocity += positionDifference[i] * positionDifference[i];
+	}
+	velocity = sqrt(velocity);
+
+	return velocity;
+}
+

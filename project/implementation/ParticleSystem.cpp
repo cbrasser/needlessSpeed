@@ -11,7 +11,7 @@ void ParticleSystem::Start() {
 }
 
 void ParticleSystem::updateSize(int index) { // logarithmic function that calculates
-	particleArray[index]->size = particleArray[index]->randomScale*(log10f(-(20 - particleArray[index]->timeToLive)/2 + 400.1) + 1)/5;
+	//particleArray[index]->size = particleArray[index]->size*(log10f(particleArray[index]->timeToLive)/2);
 }
 
 void ParticleSystem::Update() {
@@ -26,7 +26,7 @@ void ParticleSystem::Update() {
 			allDead = false;
 			updateSize(i);
 			particleArray[i]->timeToLive -= 1;
-			particleArray[i]->position += particleArray[i]->direction * particleArray[i]->velocity * TheTime::deltaTime;
+			particleArray[i]->position = particleArray[i]->position + ((particleArray[i]->direction * particleArray[i]->velocity * TheTime::deltaTime) / 2);
 		}
 	} 
 	if (allDead) {
