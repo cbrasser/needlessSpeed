@@ -21,7 +21,7 @@ public:
 		}
 	}
 
-	void render() override {
+	void render(std::string cameraName) override {
 		/*
 		vmml::Vector3f front = transform->forward() * 10;
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -35,7 +35,7 @@ public:
 
 		vmml::Matrix4f modelMatrix = gameObject->getComponent<Transform>()->getTransformationMatrix();
         
-        TheRenderer::Instance()->renderer->getModelRenderer()->queueModelInstance("asteroid", "asteroid_" + std::to_string(gameObject->getId()), "camera", modelMatrix, std::vector<std::string>({ "firstLight", "laserLight0",
+        TheRenderer::Instance()->renderer->getModelRenderer()->queueModelInstance("asteroid", "asteroid_" + std::to_string(gameObject->getId()), cameraName, modelMatrix, std::vector<std::string>({ "firstLight", "laserLight0",
             "laserLight1",
             "laserLight2",
             "laserLight3",

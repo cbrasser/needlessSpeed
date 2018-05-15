@@ -7,10 +7,16 @@
 #include "TheRenderer.h"
 #include "ParticleSystem.h"
 #include "Particle.h"
+#include "TheTime.h"
 
 class ParticleSystemRenderer : public ObjectRenderer {
 public:
 	ParticleSystem* particleSystem = new ParticleSystem;
+
+	float pi = 3.1414f;
+	float frequency = 3.0f;
+	GLfloat dayNightPulse = 0.0f;
+	TheTime theTime;
 
 //	GLint lastG; // Keyboard Input
     
@@ -21,13 +27,13 @@ public:
         if (TheRenderer::Instance()->renderer->getObjects()->getModel("quad") == nullptr) {
 			ShaderPtr spriteShader = TheRenderer::Instance()->renderer->getObjects()->loadShaderFile("sprite", 0, false, false, false, false, false);
 		
-			TheRenderer::Instance()->renderer->getObjects()->loadTexture("flameSpriteSmall.png");
+			TheRenderer::Instance()->renderer->getObjects()->loadTexture("dirtSprite.png");
 
 			TheRenderer::Instance()->renderer->getObjects()->loadObjModel("quad.obj", false, true, spriteShader);
         }
 	}
     
-    void render() override {
+	void render(std::string cameraName) override {
 
         // Keyboard and touch inputs for testing purposes
 //		GLint currentG = TheRenderer::Instance()->renderer->getInput()->getKeyState(bRenderer::KEY_G);
@@ -54,14 +60,19 @@ public:
         
 		ShaderPtr spriteShader = TheRenderer::Instance()->renderer->getObjects()->getShader("sprite");
 
-		TexturePtr texturePtr = TheRenderer::Instance()->renderer->getObjects()->getTexture("flameSpriteSmall");
+		TexturePtr texturePtr = TheRenderer::Instance()->renderer->getObjects()->getTexture("dirtSprite");
+		TexturePtr colorLUT = TheRenderer::Instance()->renderer->getObjects()->getTexture("colorLUT");
 
 		for (int i = 0; i < particleSystem->numOfParticles; i++) {
+			dayNightPulse = 0.5*(1 + cos(theTime.time / frequency));
+
 			spriteShader->setUniform("DiffuseMapNew", texturePtr);
+			spriteShader->setUniform("DayNightPulse", dayNightPulse);
+			spriteShader->setUniform("ColorLUT", colorLUT);
 		}
         
-        if ( !particleSystem->isDone) { // not all particles are dead
-
+       // if ( !particleSystem->isDone) { // not all particles are dead
+		if (true) { // not all particles are dead
 
 			vmml::Vector3f actualPosition = gameObject->getComponent<Transform>()->getPosition();
 
@@ -117,18 +128,18 @@ public:
 					vmml::Matrix4f translation = vmml::create_translation(particleSystem->particleArray[i]->position); // positions quads in the correct place defined py pthe particle system.
 
 					//logarithmic size based on timetolive
-					vmml::Matrix4f scale = vmml::create_scaling(particleSystem->particleArray[i]->size * 10);
+					vmml::Matrix4f scale = vmml::create_scaling(particleSystem->particleArray[i]->size * 2);
                     
                     vmml::Matrix4f modelMatrix = gameObject->getComponent<Transform>()->getTransformationMatrix(); // Luka please leave this line here and not out of the loop otherwise the whole explosionRender does not work properly anymore, cheers Silvo.
 					modelMatrix = moveBackToPosition*translation*centerRotation*cameraRotation*startingRotation *scale*bringToOrigin*modelMatrix;
 
 
-					vmml::Matrix4f view = TheRenderer::Instance()->renderer->getObjects()->getCamera("camera")->getViewMatrix();
-					vmml::Matrix4f projection = TheRenderer::Instance()->renderer->getObjects()->getCamera("camera")->getProjectionMatrix();
+					vmml::Matrix4f view = TheRenderer::Instance()->renderer->getObjects()->getCamera(cameraName)->getViewMatrix();
+					vmml::Matrix4f projection = TheRenderer::Instance()->renderer->getObjects()->getCamera(cameraName)->getProjectionMatrix();
 
 					vmml::Matrix4f modelViewMatrix = view*modelMatrix;
                     
-					TheRenderer::Instance()->renderer->getModelRenderer()->queueModelInstance("quad", "quad_" + std::to_string(i + 1), "camera", modelMatrix, std::vector<std::string>({}), false, false, true, GL_SRC_COLOR, GL_ONE);
+					TheRenderer::Instance()->renderer->getModelRenderer()->queueModelInstance("quad", "quad_" + std::to_string(i + 1), cameraName, modelMatrix, std::vector<std::string>({}), false, false, true, GL_SRC_COLOR, GL_ONE);
 				}
 				else {}; // do nothing because particle is not alive anymore
 			}

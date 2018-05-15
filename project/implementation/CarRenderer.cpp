@@ -28,7 +28,7 @@ public:
 		}
 	}
 
-	void render() override {
+	void render(std::string cameraName) override {
 		std::cout << "============render car renderer=============" << std::endl;
 
 		vmml::Matrix4f modelMatrix = gameObject->getComponent<Transform>()->getTransformationMatrix();
@@ -60,7 +60,7 @@ public:
 		shader->setUniform("DayNightPulse", dayNightPulse);
 	}
         //TheRenderer::Instance()->renderer->getModelRenderer()->queueModelInstance("car", "car" + std::to_string(gameObject->getId()), "camera", modelMatrix, std::vector<std::string>({ "firstLight"}), false, false, false);
-    	TheRenderer::Instance()->renderer->getModelRenderer()->drawModel("Car", "camera", modelMatrix, std::vector<std::string>({ }));
+    	TheRenderer::Instance()->renderer->getModelRenderer()->drawModel("Car", cameraName, modelMatrix, std::vector<std::string>({ }));
     }
 };
 

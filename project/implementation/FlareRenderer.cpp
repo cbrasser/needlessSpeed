@@ -39,7 +39,7 @@ public:
 
 	}
     
-	void render() override {
+	void render(std::string cameraName) override {
 		ShaderPtr flareShader = TheRenderer::Instance()->renderer->getObjects()->getShader("flare");
 
 
@@ -72,15 +72,15 @@ public:
 		vmml::Matrix4f moveBackToPosition = vmml::create_translation(actualPosition);
 		vmml::Matrix4f modelMatrix = gameObject->getComponent<Transform>()->getTransformationMatrix(); // Luka please leave this line here and not out of the loop otherwise the whole explosionRender does not work properly anymore, cheers Silvo.
 		
-		vmml::Vector3f cameraPosition = TheRenderer::Instance()->renderer->getObjects()->getCamera("camera")->getPosition();
-		vmml::Vector3f cameraRight = TheRenderer::Instance()->renderer->getObjects()->getCamera("camera")->getRight();
-		vmml::Vector3f cameraUp = TheRenderer::Instance()->renderer->getObjects()->getCamera("camera")->getUp();
-		vmml::Vector3f cameraForward = TheRenderer::Instance()->renderer->getObjects()->getCamera("camera")->getForward();
+		vmml::Vector3f cameraPosition = TheRenderer::Instance()->renderer->getObjects()->getCamera(cameraName)->getPosition();
+		vmml::Vector3f cameraRight = TheRenderer::Instance()->renderer->getObjects()->getCamera(cameraName)->getRight();
+		vmml::Vector3f cameraUp = TheRenderer::Instance()->renderer->getObjects()->getCamera(cameraName)->getUp();
+		vmml::Vector3f cameraForward = TheRenderer::Instance()->renderer->getObjects()->getCamera(cameraName)->getForward();
 
 
 
-		vmml::Matrix4f view = TheRenderer::Instance()->renderer->getObjects()->getCamera("camera")->getViewMatrix();
-		vmml::Matrix4f projection = TheRenderer::Instance()->renderer->getObjects()->getCamera("camera")->getProjectionMatrix();
+		vmml::Matrix4f view = TheRenderer::Instance()->renderer->getObjects()->getCamera(cameraName)->getViewMatrix();
+		vmml::Matrix4f projection = TheRenderer::Instance()->renderer->getObjects()->getCamera(cameraName)->getProjectionMatrix();
 
 		vmml::Matrix4f modelViewMatrix = view*modelMatrix;
 

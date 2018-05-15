@@ -21,10 +21,20 @@ void TheRenderer::init() {
 	}
 }
 
+void TheRenderer::renderShadows() {
+	for (std::vector<ObjectRenderer*>::iterator it = renderQueue.begin(); it != renderQueue.end(); ++it) {
+		if ((*it)->getEnable())
+			(*it)->render("shadowCamera");
+	}
+
+	renderer->getModelRenderer()->drawQueue(/*GL_LINES*/);
+	renderer->getModelRenderer()->clearQueue();
+}
+
 void TheRenderer::render() {
 	for (std::vector<ObjectRenderer*>::iterator it = renderQueue.begin(); it != renderQueue.end(); ++it) {
 		if ((*it)->getEnable())
-			(*it)->render();
+			(*it)->render("camera");
 	}
 
 	renderer->getModelRenderer()->drawQueue(/*GL_LINES*/);

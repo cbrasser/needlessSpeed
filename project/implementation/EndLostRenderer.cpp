@@ -21,7 +21,7 @@ public:
 		}
 	}
 
-	void render() override {
+	void render(std::string cameraName) override {
 
 		ShaderPtr spriteShader = TheRenderer::Instance()->renderer->getObjects()->getShader("sprite");
 

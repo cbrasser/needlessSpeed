@@ -15,9 +15,9 @@ public:
 		}
 	}
 
-	void render() override {
+	void render(std::string cameraName) override {
 		vmml::Matrix4f modelMatrix = gameObject->getComponent<Transform>()->getTransformationMatrix();
-		TheRenderer::Instance()->renderer->getModelRenderer()->queueModelInstance("bo", "Boost_" + std::to_string(gameObject->getId()), "camera", modelMatrix, std::vector<std::string>({ "" }), false, false, false);
+		TheRenderer::Instance()->renderer->getModelRenderer()->queueModelInstance("bo", "Boost_" + std::to_string(gameObject->getId()), cameraName, modelMatrix, std::vector<std::string>({ "" }), false, false, false);
 	}
 };
 
