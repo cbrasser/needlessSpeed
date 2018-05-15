@@ -89,7 +89,7 @@ void Core::initFunction()
 	GLfloat dayNightPulse = 0.0f;
 	_offset = 0.0f;
 	_randomOffset = 0.0f;
-	_cameraSpeed = 2.0f;
+	_cameraSpeed = 2.0f;	
 	_running = true;
 	 _lastStateSpaceKey = bRenderer::INPUT_UNDEFINED;
 
@@ -98,7 +98,7 @@ void Core::initFunction()
 	bRenderer().getObjects()->setShaderVersionES("#version 100");
 	_viewMatrixHUD = Camera::lookAt(vmml::Vector3f(0.0f, 0.0f, 0.25f), vmml::Vector3f::ZERO, vmml::Vector3f::UP);
 
-    // Create camera before loading the space since its position is needed for the skybox
+    // Create camera
     bRenderer().getObjects()->createCamera("camera", vmml::Vector3f(0.f, -4.5f, 0.0f), vmml::Vector3f(-0.5f, 0.f, 0.f));
     bRenderer().getObjects()->loadTexture("colorLUT.png");
     //bRenderer().getObjects()->createCamera("camera", vmml::Vector3f(0.0f, 0.0f, 10.0f), vmml::Vector3f(0.f, 0.0f, 0.f));

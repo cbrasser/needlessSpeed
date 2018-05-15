@@ -148,7 +148,7 @@ float getTurning(float turning)
 		vmml::Vector3f pos = transform->getPosition();
 		transform->setPosition(newPos);
 		transform->setRotation(turning/20*vmml::Vector3f(0,1,0));
-		//TODO: set rotation!
+		
 	}
 };
 
