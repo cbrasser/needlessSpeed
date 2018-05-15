@@ -10,8 +10,11 @@ public:
 	float size;
     float randomScale;
 	vmml::Vector3f position;
+	vmml::Vector3f positionTemp;
 	vmml::Vector3f direction;
 	bool isAlive;
+	double carX;
+	double carY;
 
 	Particle();
 	static vmml::Vector3f newDirection();

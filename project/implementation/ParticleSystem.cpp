@@ -1,7 +1,7 @@
 #include "ParticleSystem.h"
 
 void ParticleSystem::Start() {
-	numOfParticles = 10; // Specify amount of particles here
+	numOfParticles = 20; // Specify amount of particles here
 	particleArray = new Particle*[numOfParticles];
 	bool isDone = true;
 	

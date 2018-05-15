@@ -7,10 +7,16 @@
 #include "TheRenderer.h"
 #include "ParticleSystem.h"
 #include "Particle.h"
+#include "TheTime.h"
 
 class ParticleSystemRenderer : public ObjectRenderer {
 public:
 	ParticleSystem* particleSystem = new ParticleSystem;
+
+	float pi = 3.1414f;
+	float frequency = 3.0f;
+	GLfloat dayNightPulse = 0.0f;
+	TheTime theTime;
 
 //	GLint lastG; // Keyboard Input
     
@@ -55,9 +61,14 @@ public:
 		ShaderPtr spriteShader = TheRenderer::Instance()->renderer->getObjects()->getShader("sprite");
 
 		TexturePtr texturePtr = TheRenderer::Instance()->renderer->getObjects()->getTexture("dirtSprite");
+		TexturePtr colorLUT = TheRenderer::Instance()->renderer->getObjects()->getTexture("colorLUT");
 
 		for (int i = 0; i < particleSystem->numOfParticles; i++) {
+			dayNightPulse = 0.5*(1 + cos(theTime.time / frequency));
+
 			spriteShader->setUniform("DiffuseMapNew", texturePtr);
+			spriteShader->setUniform("DayNightPulse", dayNightPulse);
+			spriteShader->setUniform("ColorLUT", colorLUT);
 		}
         
        // if ( !particleSystem->isDone) { // not all particles are dead
