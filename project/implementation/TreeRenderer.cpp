@@ -29,7 +29,6 @@ public:
 	}
 
 	void render(std::string cameraName) override {
-		std::cout << "============render tree renderer=============" << std::endl;
 
 		vmml::Matrix4f modelMatrix = gameObject->getComponent<Transform>()->getTransformationMatrix();
 		//vmml::Matrix4f modelMatrix = vmml::create_scaling(vmml::Vector3f(1,1,1));

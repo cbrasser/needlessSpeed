@@ -29,7 +29,6 @@ public:
 	}
 
 	void render(std::string cameraName) override {
-		std::cout << "============render car renderer=============" << std::endl;
 
 		vmml::Matrix4f modelMatrix = gameObject->getComponent<Transform>()->getTransformationMatrix();
         TexturePtr colorLUT = TheRenderer::Instance()->renderer->getObjects()->getTexture("colorLUT");

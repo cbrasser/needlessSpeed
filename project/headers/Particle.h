@@ -20,7 +20,7 @@ public:
 	Particle();
 	static vmml::Vector3f newDirection();
 	void reset();
-	float Particle::calculateVelocity(vmml::Vector3f oldPosition, vmml::Vector3f tempPosition);
+	float calculateVelocity(vmml::Vector3f oldPosition, vmml::Vector3f tempPosition);
 };
 
 #endif /* defined(PARTICLE_H) */

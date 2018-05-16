@@ -99,7 +99,7 @@ void Core::initFunction()
 	_viewMatrixHUD = Camera::lookAt(vmml::Vector3f(0.0f, 0.0f, 0.25f), vmml::Vector3f::ZERO, vmml::Vector3f::UP);
 
     // Create camera
-    bRenderer().getObjects()->createCamera("camera", vmml::Vector3f(0.f, -4.5f, 0.0f), vmml::Vector3f(-0.5f, 0.f, 0.f));
+    bRenderer().getObjects()->createCamera("camera", vmml::Vector3f(0.f, -4.5f, -3.0f), vmml::Vector3f(-0.5f, 0.f, 0.f));
 	bRenderer().getObjects()->createCamera("shadowCamera", vmml::Vector3f(0.f, -35.5f, 4.0f), vmml::Vector3f(-1.3f, 0.f, 0.f));
 
 	bRenderer().getObjects()->loadTexture("colorLUT.png");
