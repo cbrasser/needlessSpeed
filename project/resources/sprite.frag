@@ -1,7 +1,4 @@
-$B_SHADER_VERSION
-#ifdef GL_ES
-precision lowp float;
-#endif
+#version 130
 
 //Was trying to fix the warning
 uniform vec4 lightPositionViewSpace_0;

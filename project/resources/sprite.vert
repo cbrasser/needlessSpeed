@@ -1,7 +1,5 @@
-$B_SHADER_VERSION
-#ifdef GL_ES
-precision lowp float;
-#endif
+#version 130
+
 uniform vec4 lightPositionViewSpace_0;
 uniform float lightIntensity_0;
 uniform float lightAttenuation_0;
