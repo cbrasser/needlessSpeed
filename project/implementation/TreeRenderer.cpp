@@ -21,8 +21,7 @@ public:
 
 	void init() override {
 		if (TheRenderer::Instance()->renderer->getObjects()->getModel("Tree") == nullptr) {
-			std::cout << "============init tree renderer=============" << std::endl;
-			// Use flat shader
+			
 			ShaderPtr treeShader = TheRenderer::Instance()->renderer->getObjects()->loadShaderFile("tree", 0, false, false, false, false, false);
 			TheRenderer::Instance()->renderer->getObjects()->loadObjModel("Tree.obj", false, true, treeShader, nullptr);
 		}

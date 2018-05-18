@@ -20,8 +20,7 @@ public:
 
 	void init() override {
 		if (TheRenderer::Instance()->renderer->getObjects()->getModel("Track") == nullptr) {
-            std::cout << "============init track renderer=============" << std::endl;
-            // Use flat shader
+          
             ShaderPtr generalShader = TheRenderer::Instance()->renderer->getObjects()->loadShaderFile("general", 0, false, false, false, false, false);
             TheRenderer::Instance()->renderer->getObjects()->loadObjModel("Track.obj", false, true, generalShader, nullptr);
 		}

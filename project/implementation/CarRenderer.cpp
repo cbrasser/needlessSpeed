@@ -21,8 +21,7 @@ public:
 
 	void init() override {
 		if (TheRenderer::Instance()->renderer->getObjects()->getModel("Car") == nullptr) {
-            std::cout << "============init car renderer=============" << std::endl;
-            // Use flat shader
+    
             ShaderPtr carShader = TheRenderer::Instance()->renderer->getObjects()->loadShaderFile("car", 0, false, false, false, false, false);
             TheRenderer::Instance()->renderer->getObjects()->loadObjModel("Car.obj", false, true, carShader, nullptr);
 		}

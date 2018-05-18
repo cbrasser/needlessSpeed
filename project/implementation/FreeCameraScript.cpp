@@ -44,9 +44,6 @@ public:
 		vmml::Vector3f position = SceneManager::getCurrentScene()->getObjectByName("Car")->transform->getPosition();
 		vmml::Matrix4f carRot = SceneManager::getCurrentScene()->getObjectByName("Car")->transform->getRotation();
 
-		std::cout<<"\nCamera Rotation: "<<camRot;
-
-
 		double camX = camPos[0];
 		double camZ = camPos[1];
 		double camY = camPos[2];
@@ -58,55 +55,42 @@ public:
 		cameraSideward =  (camX-carX);	
 		cameraUpward = camY - carY;// - desiredDelta;
 
-		
-		std::cout << "\n";
-		std::cout << "\n";
 		double carAngle = 0.0;
 		double camAngle = 0.0;
 		double deltaRotation = 0.0;
 		if(carRot[0][0]<0){
-			std::cout <<"\nCorrect part: ";
-			carAngle = acos(carRot[0][2]);
+				carAngle = acos(carRot[0][2]);
 			if(camRot[0][0]<0){
-				std::cout <<"\nCamera in correct part: ";
 				camAngle = acos(camRot[0][2]);
 			}else {
 				camAngle = 2*3.1415 - acos(camRot[0][2]);
 				deltaRotation = carAngle - camAngle;
 			}
 		} else {
-			std::cout <<"\nIncorrect part: ";
 			carAngle = 2*3.1415 -acos(carRot[0][2]);
 			if(camRot[0][0]<0){
-				std::cout <<"\nCamera still in correct part: ";
 				camAngle = acos(camRot[0][2]);				
 			}else {
-				std::cout <<"\nCamera in Incorrect part: ";
 				camAngle = 2*3.1415 - acos(camRot[0][2]);
 			}
 			
 		}
 		//carAngle = std::fmod(carAngle + 3.1415,2*3.1415);
-		std::cout <<"\nCar angle: "<<carAngle;
 		camAngle = std::fmod(2*3.1415 - camAngle,2*3.1415);
-		std::cout <<"\nCamera angle: "<<camAngle;
 		deltaRotation = carAngle - camAngle;
 
 		cameraSideward2 = desiredDelta*cos(carAngle);
-		std::cout <<"\ncamera sideward: "<<cameraSideward2;
 		cameraUpward2 = -desiredDelta*sin(carAngle);
-		std::cout <<"\ncamera upward: "<<cameraUpward2;
-		
+				
 		if (deltaRotation < 0){
 			deltaRotation += 2*3.1415;
 		}
 		if(deltaRotation <=0.001 || deltaRotation >= 2*3.1415-0.001){
 			deltaRotation = 0;
 		}
-		std::cout <<"delta rotation: " << deltaRotation;
+		
 		//// Update camera ////
         if(cameraSideward>=1.0f || cameraSideward <= 1.0f){
-			std::cout <<"distance: " << distance;
 			TheRenderer::Instance()->renderer->getObjects()->getCamera("camera")->setRotation(vmml::Vector3f(0.f,0.f,0.f));
 
     		//Lerp towards center of the car in carX

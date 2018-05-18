@@ -21,16 +21,13 @@ public:
 
 	void init() override {
 		if (TheRenderer::Instance()->renderer->getObjects()->getModel("Wheel") == nullptr) {
-			std::cout << "============init wheel renderer=============" << std::endl;
-			// Use flat shader
+		
 			ShaderPtr wheelShader = TheRenderer::Instance()->renderer->getObjects()->loadShaderFile("car", 0, false, false, false, false, false);
 			TheRenderer::Instance()->renderer->getObjects()->loadObjModel("Wheel.obj", false, true, wheelShader, nullptr);
 		}
 	}
 
 	void render(std::string cameraName) override {
-		std::cout << "============render wheel renderer=============" << std::endl;
-
 		vmml::Matrix4f modelMatrix = gameObject->getComponent<Transform>()->getTransformationMatrix();
 		TexturePtr colorLUT = TheRenderer::Instance()->renderer->getObjects()->getTexture("colorLUT");
 

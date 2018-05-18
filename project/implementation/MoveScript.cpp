@@ -137,17 +137,10 @@ float getTurning(float turning)
 		else {
 			turningDirection = 0.f;
 		}
-		std::cout<<"Velocity with directions: "<<velocityForAcceleration;
-		std::cout<<"accelerating output: "<<accelerating;
 		
 		vmml::Vector3f acceleration = accelerating*carDir;
 
-		std::cout<<"acceleration vector: "<<acceleration;
-		std::cout<<"veloctiy vector 1: "<<velocity;
 		velocity += acceleration;
-
-
-		std::cout<<"veloctiy vector 2: "<<velocity;
 
 		if(abs>20.0f){
 				velocity = vmml::normalize(velocity)*20.0f;
