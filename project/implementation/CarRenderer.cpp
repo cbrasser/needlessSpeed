@@ -21,8 +21,7 @@ public:
 
 	void init() override {
 		if (TheRenderer::Instance()->renderer->getObjects()->getModel("Car") == nullptr) {
-            std::cout << "============init car renderer=============" << std::endl;
-            // Use flat shader
+    
             ShaderPtr carShader = TheRenderer::Instance()->renderer->getObjects()->loadShaderFile("car", 0, false, false, false, false, false);
             TheRenderer::Instance()->renderer->getObjects()->loadObjModel("Car.obj", false, true, carShader, nullptr);
 		}
@@ -49,7 +48,7 @@ public:
 		shader->setUniform("ColorLUT", colorLUT);
 		
 		vmml::Matrix3f normalMatrix;
-		vmml::compute_inverse(vmml::transpose(vmml::Matrix3f(modelMatrix)), normalMatrix);
+		vmml::compute_inverse(vmml::Matrix3f(modelMatrix), normalMatrix);
 		shader->setUniform("NormalMatrix", normalMatrix);
 
 		vmml::Vector4f eyePos = vmml::Vector4f(0.0f, 0.0f, 10.0f, 1.0f);
@@ -63,4 +62,4 @@ public:
     }
 };
 
-#endif /* defined(ASTEROID_RENDERER_H) */
+#endif /* defined(CAR_RENDERER_H) */

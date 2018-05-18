@@ -44,9 +44,6 @@ public:
 		vmml::Vector3f position = SceneManager::getCurrentScene()->getObjectByName("Car")->transform->getPosition();
 		vmml::Matrix4f carRot = SceneManager::getCurrentScene()->getObjectByName("Car")->transform->getRotation();
 
-		std::cout<<"\nCamera Rotation: "<<camRot;
-
-
 		double camX = camPos[0];
 		double camZ = camPos[1];
 		double camY = camPos[2];
@@ -58,13 +55,12 @@ public:
 		cameraSideward =  (camX-carX);	
 		cameraUpward = camY - carY;// - desiredDelta;
 
-		
-
 		double carAngle = 0.0;
 		double camAngle = 0.0;
 		double deltaRotation = 0.0;
 		if(carRot[0][0]<0){
 			carAngle = acos(carRot[0][2]);
+				carAngle = acos(carRot[0][2]);
 			if(camRot[0][0]<0){
 				camAngle = acos(camRot[0][2]);
 			}else {
@@ -86,13 +82,14 @@ public:
 
 		cameraSideward2 = desiredDelta*cos(carAngle);
 		cameraUpward2 = -desiredDelta*sin(carAngle);
-		
+				
 		if (deltaRotation < 0){
 			deltaRotation += 2*3.1415;
 		}
 		if(deltaRotation <=0.001 || deltaRotation >= 2*3.1415-0.001){
 			deltaRotation = 0;
 		}
+
 		//// Update camera ////
         if(cameraSideward>=1.0f || cameraSideward <= 1.0f){
 			TheRenderer::Instance()->renderer->getObjects()->getCamera("camera")->setRotation(vmml::Vector3f(0.f,0.f,0.f));
