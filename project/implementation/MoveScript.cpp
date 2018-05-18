@@ -17,7 +17,7 @@ public:
 	float pi = 3.14f;
 	vmml::Vector3f position = vmml::Vector3f(0,0,0);
 	vmml::Vector3f velocity = vmml::Vector3f(0,0,0);
-
+	TheTime theTime;
 	float getAcceleration(float velocityForAcceleration){
 	float accFac = 20.0f;
 	float intervalLimit = 0.2;
@@ -26,6 +26,7 @@ public:
 	float std = 5.0f;
 	float var = 10.0f;
 	float abs;
+
 	if(velocityForAcceleration<0.0f){
 		abs = - 2*velocityForAcceleration;
 	} else {
@@ -87,11 +88,14 @@ float getTurning(float turning)
 {
 	float newTurning = turning;
 
-	
-			if (TheRenderer::Instance()->renderer->getInput()->getKeyState(bRenderer::KEY_A) == bRenderer::INPUT_PRESS)
-				newTurning -= 1.0;
-			else if (TheRenderer::Instance()->renderer->getInput()->getKeyState(bRenderer::KEY_D) == bRenderer::INPUT_PRESS)
-				newTurning += 1.0;
+		
+	if (TheRenderer::Instance()->renderer->getInput()->getKeyState(bRenderer::KEY_A) == bRenderer::INPUT_PRESS) {
+		newTurning -= 1.0;
+	}
+	else if (TheRenderer::Instance()->renderer->getInput()->getKeyState(bRenderer::KEY_D) == bRenderer::INPUT_PRESS) {
+		newTurning += 1.0;
+	}
+
 		
 
 		return newTurning;
@@ -103,6 +107,7 @@ float getTurning(float turning)
 		position = transform->getPosition();
 		
 		float abs = 0.0;
+		float wheelSpeed = 0.0;
 		for(int i = 0; i < velocity.size(); i++) abs += velocity[i] * velocity[i];
 		abs = sqrt(abs);
 		vmml::Vector3f someOtherVelocity = velocity;
@@ -119,7 +124,19 @@ float getTurning(float turning)
 			velocityForAcceleration = -velocityForAcceleration;
 		}
 		float accelerating = this->getAcceleration(velocityForAcceleration);
+		
+		float turningDirection = 0.0f;
+		float turningOld = turning;
 		turning = this->getTurning(turning);
+		if (turningOld < turning) {
+			turningDirection = -1.f;
+		}
+		else if (turningOld > turning) {
+			turningDirection = 1.f;
+		}
+		else {
+			turningDirection = 0.f;
+		}
 		std::cout<<"Velocity with directions: "<<velocityForAcceleration;
 		std::cout<<"accelerating output: "<<accelerating;
 		
@@ -142,17 +159,46 @@ float getTurning(float turning)
 		//vmml::Vector3f rot = vmml::Vector3f(0,1,0);
 		//vmml::Vector3f scale = vmml::Vector3f(1,1,1);
 		//vmml::Matrix4f carModelMatrix = vmml::create_translation(newPos)*vmml::create_rotation(turning/20,rot)*vmml::create_scaling(scale);
+		//TODO: set rotation!
+
 
 		vmml::Vector3f pos = transform->getPosition();
 		transform->setPosition(newPos);
 		transform->setRotation(turning/20*vmml::Vector3f(0,1,0));
+
+
+
+		//Wheel Animation
+		if (abs >= 5.f) {
+			wheelSpeed = 5.f;
+		}
+		else {
+			wheelSpeed = abs;
+		}
+
+		if (turningDirection < 0.f) { //turning right
+			SceneManager::getCurrentScene()->getObjectByName("WheelLF")->transform->setRotationMultiple(vmml::Vector3f(-0.2f * wheelSpeed * theTime.time, 0.f, 0.f), vmml::Vector3f(0.f, 0.5f, 0.f));
+			SceneManager::getCurrentScene()->getObjectByName("WheelRF")->transform->setRotationMultiple(vmml::Vector3f(0.2f * wheelSpeed * theTime.time, 0.f, 0.f), vmml::Vector3f(0.f, (3.14159f + 0.5f), 0.f));
 		
+			SceneManager::getCurrentScene()->getObjectByName("WheelLR")->transform->setRotation(vmml::Vector3f(-0.2f * wheelSpeed * theTime.time, 0.f, 0.f));
+			SceneManager::getCurrentScene()->getObjectByName("WheelRR")->transform->setRotation(vmml::Vector3f(-0.2f * wheelSpeed * theTime.time, (3.14159f + 0.f), 0.f));
+		}
+		else if (turningDirection > 0.f) { //turning left
+			SceneManager::getCurrentScene()->getObjectByName("WheelLF")->transform->setRotationMultiple(vmml::Vector3f(-0.2f * wheelSpeed * theTime.time, 0.f, 0.f), vmml::Vector3f(0.f, -0.5f, 0.f));
+			SceneManager::getCurrentScene()->getObjectByName("WheelRF")->transform->setRotationMultiple(vmml::Vector3f(0.2f * wheelSpeed * theTime.time, 0.f, 0.f), vmml::Vector3f(0.f, (3.14159f - 0.5f), 0.f));
+		
+			SceneManager::getCurrentScene()->getObjectByName("WheelLR")->transform->setRotation(vmml::Vector3f(-0.2f * wheelSpeed * theTime.time, 0.f, 0.f));
+			SceneManager::getCurrentScene()->getObjectByName("WheelRR")->transform->setRotation(vmml::Vector3f(-0.2f * wheelSpeed * theTime.time, (3.14159f + 0.f), 0.f));
+		}
+		else { //not turning
+			SceneManager::getCurrentScene()->getObjectByName("WheelLF")->transform->setRotation(vmml::Vector3f(-0.2f * wheelSpeed * theTime.time, 0.f, 0.f));
+			SceneManager::getCurrentScene()->getObjectByName("WheelRF")->transform->setRotation(vmml::Vector3f(-0.2f * wheelSpeed * theTime.time, (3.14159f + 0.f), 0.f));
+			
+			SceneManager::getCurrentScene()->getObjectByName("WheelLR")->transform->setRotation(vmml::Vector3f(-0.2f * wheelSpeed * theTime.time, 0.f, 0.f));
+			SceneManager::getCurrentScene()->getObjectByName("WheelRR")->transform->setRotation(vmml::Vector3f(-0.2f * wheelSpeed * theTime.time, (3.14159f + 0.f), 0.f));
+		}
 	}
 };
-
-
-
-
 
 
 #endif /* defined(MOVE_SCRIPT_H) */

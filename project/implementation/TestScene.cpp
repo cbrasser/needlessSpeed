@@ -7,6 +7,7 @@
 #include "Logic.h"
 #include "CarRenderer.cpp"
 #include "TrackRenderer.cpp"
+#include "WheelRenderer.cpp"
 #include "MoveScript.cpp"
 #include "Physics.h"
 #include "FreeCameraScript.cpp"
@@ -29,15 +30,42 @@ public:
 		std::cout << "=========================" << std::endl;
 
 		/*** Create Objects ***/
+
+		//Car and Wheels
 		GameObject *Car = instanciate("Car");
 		Car->addComponent<CarRenderer>();
+		Car->getComponent<Transform>()->setPosition(vmml::Vector3f(0.f, 0.2f, 0.f));
 		Car->addComponent<MoveScript>();
+		
+		GameObject *WheelLR = instanciate("WheelLR");
+		WheelLR->addComponent<WheelRenderer>();
+		WheelLR->getComponent<Transform>()->setParent(Car);
+		WheelLR->getComponent<Transform>()->setPosition(vmml::Vector3f(0.65f, 0.2f, 1.32f));
 
+		GameObject *WheelLF = instanciate("WheelLF");
+		WheelLF->addComponent<WheelRenderer>();
+		WheelLF->getComponent<Transform>()->setParent(Car);
+		WheelLF->getComponent<Transform>()->setPosition(vmml::Vector3f(0.65f, 0.2f, -1.125f));
+
+		GameObject *WheelRR = instanciate("WheelRR");
+		WheelRR->addComponent<WheelRenderer>();
+		WheelRR->getComponent<Transform>()->setParent(Car);
+		WheelRR->getComponent<Transform>()->setRotation(vmml::Vector3f(0.f, 3.14159f, 0.f));
+		WheelRR->getComponent<Transform>()->setPosition(vmml::Vector3f(-0.64f, 0.2f, 1.32f));
+
+		GameObject *WheelRF = instanciate("WheelRF");
+		WheelRF->addComponent<WheelRenderer>();
+		WheelRF->getComponent<Transform>()->setParent(Car);
+		WheelRF->getComponent<Transform>()->setRotation(vmml::Vector3f(0.f, 3.14159f, 0.f));
+		WheelRF->getComponent<Transform>()->setPosition(vmml::Vector3f(-0.64f, 0.2f, -1.125f));
+
+		//Environment
 		GameObject *Track = instanciate("Track");
 		Track->addComponent<TrackRenderer>();
 
 		GameObject *Tree = instanciate("Tree");
 		Tree->addComponent<TreeRenderer>();
+		Tree->getComponent<Transform>()->setPosition(vmml::Vector3f(0.f, 0.f, 0.f));
 
 		//Particles
 		GameObject *ParticleSystem = instanciate("ParticleSystem");

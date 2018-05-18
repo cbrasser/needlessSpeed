@@ -49,7 +49,7 @@ public:
 		shader->setUniform("ColorLUT", colorLUT);
 		
 		vmml::Matrix3f normalMatrix;
-		vmml::compute_inverse(vmml::transpose(vmml::Matrix3f(modelMatrix)), normalMatrix);
+		vmml::compute_inverse(vmml::Matrix3f(modelMatrix), normalMatrix);
 		shader->setUniform("NormalMatrix", normalMatrix);
 
 		vmml::Vector4f eyePos = vmml::Vector4f(0.0f, 0.0f, 10.0f, 1.0f);
@@ -63,4 +63,4 @@ public:
     }
 };
 
-#endif /* defined(ASTEROID_RENDERER_H) */
+#endif /* defined(CAR_RENDERER_H) */

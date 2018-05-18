@@ -51,6 +51,11 @@ void Transform::setRotation(vmml::Vector3f rotation){
 	_hasChanged = true;
 }
 
+void Transform::setRotationMultiple(vmml::Vector3f rotation1, vmml::Vector3f rotation2) {
+	_rotMat = (vmml::create_rotation(rotation2[2], vmml::Vector3f::UNIT_Z) * vmml::create_rotation(rotation2[0], vmml::Vector3f::UNIT_X) * vmml::create_rotation(rotation2[1], vmml::Vector3f::UNIT_Y)) * (vmml::create_rotation(rotation1[2], vmml::Vector3f::UNIT_Z) * vmml::create_rotation(rotation1[0], vmml::Vector3f::UNIT_X) * vmml::create_rotation(rotation1[1], vmml::Vector3f::UNIT_Y));
+	_hasChanged = true;
+}
+
 void Transform::setScale(vmml::Vector3f scale){
 	if (!scale.equals(_scale)) {
 		_scale = scale;

@@ -63,4 +63,4 @@ public:
     }
 };
 
-#endif /* defined(ASTEROID_RENDERER_H) */
+#endif /* defined(TRACK_RENDERER_H) */

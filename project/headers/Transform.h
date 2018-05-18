@@ -10,6 +10,7 @@ public:
 
 	void setPosition(vmml::Vector3f position);
 	void setRotation(vmml::Vector3f rotation);
+	void setRotationMultiple(vmml::Vector3f rotation1, vmml::Vector3f rotation2);
 	void setRotation(vmml::Matrix4f rot);
 	void setScale(vmml::Vector3f scale);
 	void setParent(Transform *_parent);

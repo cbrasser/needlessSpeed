@@ -8,6 +8,9 @@
 
 #include "TestScene.cpp"
 
+//Needed to have Visual Studio recompile core.cpp in all incremental builds. Does not do anything, but can be changed to code is updated and recompile triggered
+bool justAnotherBoolInTheWall = false;
+
 SceneManager sceneManager;
 TheRenderer renderer;
 TheTime theTime;
