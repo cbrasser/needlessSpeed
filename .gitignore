@@ -75,3 +75,6 @@ bRenderer.sln/
 /windows/
 windows/*
 windows/
+
+#log file on linux
+log
