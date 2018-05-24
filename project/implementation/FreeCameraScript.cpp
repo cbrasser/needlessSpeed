@@ -28,7 +28,7 @@ public:
 
 
 		float cameraAngle = 0.5f;
-		float desiredDelta = 12.0f;
+		float desiredDelta = 5.0f;
 		double deltaCameraY = 1.3;
 		double deltaCameraX = 0.0;
 		double cameraUpward = 0.0;

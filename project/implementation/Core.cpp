@@ -5,11 +5,11 @@
 #include "Logic.h"
 #include "Physics.h"
 #include "PostProcessing.h"
-
 #include "TestScene.cpp"
 
 //Needed to have Visual Studio recompile core.cpp in all incremental builds. Does not do anything, but can be changed to code is updated and recompile triggered
 bool justAnotherBoolInTheWall = false;
+//bool justAnotherBoolInTheWall = true;
 
 SceneManager sceneManager;
 TheRenderer renderer;
@@ -19,10 +19,11 @@ Physics physics;
 PostProcessing postProcessing;
 ObjectManager o;
 
+//Variables for physics/collision detection
 double accumulatedTime = 0;
 double const FIXED_TIME_INTERVAL = 0.014;
-int asteroidAmount = 30;
 
+//Driving variables
 float acceleration = 0.f;
 float turning = 0.f;
 float _cameraSpeed = 2.0f;
@@ -34,6 +35,7 @@ float brakeFactor = -1.0f;
 vmml::Vector3f position = vmml::Vector3f(0,0,0);
 vmml::Vector3f velocity = vmml::Vector3f(0,0,0);
 
+//Day and night cycle variables
 float pi = 3.1414f;
 float frequency = 3.0f;
 GLfloat dayNightPulse = 0.0f;
@@ -68,7 +70,7 @@ void Core::init()
 		bRenderer().initRenderer(true);										// full screen on iOS
 	else
 
-		bRenderer().initRenderer(1600, 900, false, "needless speed");		// windowed mode on desktop
+		bRenderer().initRenderer(1600, 900, false, "Needless speed");		// windowed mode on desktop
 																			//bRenderer().initRenderer(View::getScreenWidth(), View::getScreenHeight(), true);		// full screen using full width and height of the screen
 
 	// start main loop 
@@ -139,8 +141,14 @@ void Core::initFunction()
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void Core::loopFunction(const double &deltaTime, const double &elapsedTime)
 {
-
 	theTime.setTime(deltaTime, elapsedTime);
+
+	// Update Physics for collisions
+	accumulatedTime += deltaTime;
+	if (accumulatedTime > FIXED_TIME_INTERVAL) {
+		Physics::update();
+		accumulatedTime = 0;
+	}
 
 	Logic::update();
 	//renderer.renderShadows();

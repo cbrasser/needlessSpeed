@@ -34,6 +34,7 @@ public:
 		//Car and Wheels
 		GameObject *Car = instanciate("Car");
 		Car->addComponent<CarRenderer>();
+		Car->addComponent<SphereCollider>()->setRadius(1.2f);
 		Car->getComponent<Transform>()->setPosition(vmml::Vector3f(0.f, 0.2f, 0.f));
 		Car->addComponent<MoveScript>();
 		
@@ -65,7 +66,8 @@ public:
 
 		GameObject *Tree = instanciate("Tree");
 		Tree->addComponent<TreeRenderer>();
-		Tree->getComponent<Transform>()->setPosition(vmml::Vector3f(0.f, 0.f, 0.f));
+		Tree->addComponent<SphereCollider>()->setRadius(1.1f);
+		Tree->getComponent<Transform>()->setPosition(vmml::Vector3f(5.f, 0.f, 0.f));
 
 		//Particles
 		GameObject *ParticleSystem = instanciate("ParticleSystem");
@@ -79,6 +81,7 @@ public:
 
 		//GameObject *ShadowCamera = instanciate("Camera");
 		//ShadowCamera->addComponent<FreeCameraScript>();
+
 	}
 };
 

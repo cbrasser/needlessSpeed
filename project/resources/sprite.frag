@@ -40,6 +40,6 @@ void main()
 	lowp vec4 lightColor = texture2D(ColorLUT, vec2(intensity, timeOfDay));
 
 	//gl_FragColor = modelTexture;
-	gl_FragColor = (lightColor * 2) * modelTexture;
+	gl_FragColor = (lightColor * 2.0) * modelTexture;
     //gl_FragColor = texture2D(DiffuseMapNew, texCoordVarying.xz);
 }

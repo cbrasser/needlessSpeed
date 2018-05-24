@@ -7,7 +7,8 @@
 #include "TheTime.h"
 #include "Scene.h"
 #include "SceneManager.h"
-
+#include "Collider.h"
+#include "Physics.h"
 
 class MoveScript : public Behaviour{
 public: 
@@ -23,7 +24,7 @@ public:
     vmml::Vector3f position = vmml::Vector3f(0,0,0);
     vmml::Vector3f velocity = vmml::Vector3f(0,0,0);
     TheTime theTime;
-    
+
     float getAcceleration(float velocityForAcceleration){
         float accFac = 20.0f;
         float intervalLimit = 0.2;
@@ -181,7 +182,7 @@ public:
     }
     
     void Update() {
-        
+
         position = transform->getPosition();
         
         float abs = 0.0;
@@ -220,8 +221,8 @@ public:
         
         velocity += acceleration;
         
-        if(abs>20.0f){
-            velocity = vmml::normalize(velocity)*20.0f;
+        if(abs>15.0f){
+            velocity = vmml::normalize(velocity)*15.0f;
         }
         
         
