@@ -151,6 +151,7 @@ void Core::loopFunction(const double &deltaTime, const double &elapsedTime)
 	}
 
 	Logic::update();
+	Logic::lateUpdate();
 	//renderer.renderShadows();
 	renderer.render();
 }

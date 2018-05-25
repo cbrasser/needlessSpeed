@@ -9,7 +9,6 @@
 #include "SceneManager.h"
 
 
-
 class FreeCameraScript : public Behaviour {
 public:
 	float speed = 10.0f;
@@ -20,9 +19,9 @@ public:
     double roll;
     double newRoll;
     vmml::Vector3f cameraForwardDirection;
-    
 
-	void Update() {
+
+	void LateUpdate() {
 		//// Adjust aspect ratio ////
 		TheRenderer::Instance()->renderer->getObjects()->getCamera("camera")->setAspectRatio(TheRenderer::Instance()->renderer->getView()->getAspectRatio());
 
