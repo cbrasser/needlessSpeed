@@ -25,6 +25,9 @@
 
 class TestScene : public Scene {
 public:
+
+
+
 	void Load() {
 
 		std::cout << "=========================" << std::endl;
@@ -68,6 +71,11 @@ public:
 		Tree->addComponent<TreeRenderer>();
 		Tree->addComponent<SphereCollider>()->setRadius(1.1f);
 		Tree->getComponent<Transform>()->setPosition(vmml::Vector3f(5.f, 0.f, 0.f));
+
+		GameObject *Tree2 = instanciate("Tree2");
+		Tree2->addComponent<TreeRenderer>();
+		Tree2->addComponent<SphereCollider>()->setRadius(1.1f);
+		Tree2->getComponent<Transform>()->setPosition(vmml::Vector3f(5.f, 0.f, 5.f));
 
 		//Particles
 		GameObject *ParticleSystem = instanciate("ParticleSystem");

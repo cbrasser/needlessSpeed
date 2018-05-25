@@ -27,6 +27,7 @@ public:
     vmml::Vector3f position = vmml::Vector3f(0,0,0);
     vmml::Vector3f velocity = vmml::Vector3f(0,0,0);
     TheTime theTime;
+	bool isCollision = false;
 
     float getAcceleration(float velocityForAcceleration){
         float accFac = 20.0f;
@@ -197,6 +198,8 @@ public:
     }
     
     void Update() {
+
+		std::cout << "Movement Script Boolean" << isCollision << std::endl;
 
         position = transform->getPosition();
         

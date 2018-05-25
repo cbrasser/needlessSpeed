@@ -16,6 +16,7 @@
 #include "SceneManager.h"
 #include "Scene.h"
 #include "LightWrapper.cpp"
+#include "MoveScript.cpp"
 
 class SphereCollider : public Collider {
 public:
@@ -27,31 +28,23 @@ public:
         float minDistance = getRadius() + other->gameObject->getComponent<SphereCollider>()->getRadius();
         if((pos1 - pos2).squared_length() <= minDistance * minDistance){
 
-            if ((other->gameObject->getComponent<TreeRenderer>() != nullptr && gameObject->getComponent<CarRenderer>() != nullptr)
-				|| (gameObject->getComponent<TreeRenderer>() != nullptr && other->gameObject->getComponent<CarRenderer>() != nullptr)) {
+            if (other->gameObject->getComponent<TreeRenderer>() != nullptr && gameObject->getComponent<CarRenderer>() != nullptr) {
                 
 				std::cout << "Collision Detected - Car and Tree" << std::endl;
-                                                                                            
+				gameObject->getComponent<MoveScript>()->isCollision = true;
+
 			}
 			/**else if (gameObject->getComponent<AsteroidRenderer>() != nullptr &&
                 other->gameObject->getComponent<AsteroidRenderer>() != nullptr) {
-                std::cout << gameObject->name << " collidet with " << other->gameObject->name << std::endl;
                 
-                Explosion->getComponent<Transform>()->setPosition(pos1);
-                Explosion->getComponent<ParticleSystemRenderer>()->init();
-                Explosion->getComponent<ParticleSystemRenderer>()->particleSystem->activate();
-                
-                SecondExplosion->getComponent<Transform>()->setPosition(pos2);
-                SecondExplosion->getComponent<ParticleSystemRenderer>()->init();
-                SecondExplosion->getComponent<ParticleSystemRenderer>()->particleSystem->activate();
-                
-                gameObject->destroy();
-                other->gameObject->destroy();
             }
             */    
 			return true;
         }
         
+		if (gameObject->getComponent<MoveScript>() != nullptr) {
+			gameObject->getComponent<MoveScript>()->isCollision = false;
+		}
         return false;
     }
     
