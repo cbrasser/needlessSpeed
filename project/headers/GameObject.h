@@ -34,7 +34,7 @@ public:
 	template<class T>
 	T* getComponent(){
 		if (componentMap.find(typeid(T)) == componentMap.end()) {
-			std::cerr << "Component was not found!" << std::endl;
+			//std::cerr << "Component was not found!" << std::endl;
 			return nullptr;
 		}
 		return (T*)componentMap[typeid(T)];

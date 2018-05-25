@@ -22,6 +22,8 @@
 #include "CameraWrapper.cpp"
 #include "ParticleSystemRenderer.cpp"
 #include "ParticleSystem.h"
+#include "StartLineRenderer.cpp"
+#include "UIRenderer.cpp"
 
 class TestScene : public Scene {
 public:
@@ -63,6 +65,7 @@ public:
 		WheelRF->getComponent<Transform>()->setRotation(vmml::Vector3f(0.f, 3.14159f, 0.f));
 		WheelRF->getComponent<Transform>()->setPosition(vmml::Vector3f(-0.64f, 0.2f, -1.125f));
 
+
 		//Environment
 		GameObject *Track = instanciate("Track");
 		Track->addComponent<TrackRenderer>();
@@ -77,11 +80,20 @@ public:
 		Tree2->addComponent<SphereCollider>()->setRadius(1.1f);
 		Tree2->getComponent<Transform>()->setPosition(vmml::Vector3f(5.f, 0.f, 5.f));
 
+
+		//Timing Markers
+		GameObject *StartLine = instanciate("StartLine");
+		StartLine->addComponent<StartLineRenderer>();
+		StartLine->addComponent<SphereCollider>()->setRadius(1.f);
+		StartLine->getComponent<Transform>()->setPosition(vmml::Vector3f(10.f, 0.f, 0.f));
+
+
 		//Particles
 		GameObject *ParticleSystem = instanciate("ParticleSystem");
 		ParticleSystem->addComponent<ParticleSystemRenderer>();
 		ParticleSystem->getComponent<Transform>()->setPosition(vmml::Vector3f(0.f, 0.f, 0.f));
 		ParticleSystem->getComponent<ParticleSystemRenderer>()->init();
+
 
 		//Camera
 		GameObject *Camera = instanciate("Camera");
@@ -89,6 +101,11 @@ public:
 
 		//GameObject *ShadowCamera = instanciate("Camera");
 		//ShadowCamera->addComponent<FreeCameraScript>();
+
+
+		//UI
+		GameObject *UI = instanciate("UI");
+		UI->addComponent<UIRenderer>();
 
 	}
 };

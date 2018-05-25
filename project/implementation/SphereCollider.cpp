@@ -17,9 +17,20 @@
 #include "Scene.h"
 #include "LightWrapper.cpp"
 #include "MoveScript.cpp"
+#include "StartLineRenderer.cpp"
+#include "TheTime.h"
+#include "UIRenderer.cpp"
 
 class SphereCollider : public Collider {
 public:
+
+	TheTime theTime;
+	double lapStartTime = 0.0;
+	double lapEndTime = 0.0;
+	double totalLapTime = 999999.0f;
+	double tempTotalLapTime;
+	double bestLapTime = 999999.0f;
+	int lapCount = -1;
 
     bool collide(Collider* other) {
         vmml::Vector3f pos1 = gameObject->getComponent<Transform>()->getPosition();
@@ -34,11 +45,32 @@ public:
 				gameObject->getComponent<MoveScript>()->isCollision = true;
 
 			}
-			/**else if (gameObject->getComponent<AsteroidRenderer>() != nullptr &&
-                other->gameObject->getComponent<AsteroidRenderer>() != nullptr) {
-                
+			else if (other->gameObject->getComponent<StartLineRenderer>() != nullptr && gameObject->getComponent<CarRenderer>() != nullptr) {
+				std::cout << "Start Line Triggered" << std::endl;
+
+				lapEndTime = theTime.time;
+				tempTotalLapTime = lapEndTime - lapStartTime;
+				lapStartTime = theTime.time;
+
+				if (tempTotalLapTime > 2.0) {
+					lapCount++;
+					std::cout << "Lap Time: " << totalLapTime << std::endl;
+					totalLapTime = tempTotalLapTime;
+
+					if (totalLapTime < bestLapTime) {
+						bestLapTime = totalLapTime;
+						std::cout << "Best Lap Time: " << bestLapTime << std::endl;
+					}
+
+					if (lapCount > 0) {
+						UItotalLapTime = totalLapTime;
+						UIbestLapTime = bestLapTime;
+					}
+					
+				}
+
             }
-            */    
+ 
 			return true;
         }
         

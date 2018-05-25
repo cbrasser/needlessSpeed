@@ -8,7 +8,7 @@
 #include "TestScene.cpp"
 
 //Needed to have Visual Studio recompile core.cpp in all incremental builds. Does not do anything, but can be changed to code is updated and recompile triggered
-bool justAnotherBoolInTheWall = false;
+//bool justAnotherBoolInTheWall = false;
 
 SceneManager sceneManager;
 TheRenderer renderer;
@@ -55,6 +55,7 @@ vmml::Vector3f cameraPosition;
 /* Cache things */
 GLint lastSPACE, lastO, lastP, last1, last2;
 float logicUpdate, physicsUpdate, logicFixedUpdate, preProcessing, postProcessingTime, render, logicLateUpdate, uiDraw;
+
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 /* Initialize the Project */
@@ -114,24 +115,9 @@ void Core::initFunction()
 
 	renderer.setRenderer(&bRenderer(), &_running);
 	SceneManager::loadScene("Test");
-
-	//PostProcessing::init();
     
     // Set starting postion
     //bRenderer().getObjects()->getCamera("camera")->setPosition(vmml::Vector3f(-50, 480, -580));
-    
-
-    // *******************************************************************************************************************************************************************************************
-    // Lights
-    // *******************************************************************************************************************************************************************************************
-    
-    //bRenderer().getObjects()->setAmbientColor(vmml::Vector3f(20 / 255.0, 20 / 255.0, 20 / 255.0));
-    
-    //bRenderer().getObjects()->createLight("firstLight", vmml::Vector3f(-800.0f, 0.0f, 0.0f), vmml::Vector3f(0.5f, 0.5f, 1.0f), vmml::Vector3f(1.0f, 1.0f, 1.0f), 10000.0f, 0.4f, 9000.0f);
-    
-    //bRenderer().getObjects()->createLight("shipLight", vmml::Vector3f(800.0f, 0.0f, 0.0f), vmml::Vector3f(1.0f, 1.0f, 1.0f), vmml::Vector3f(1.0f, 1.0f, 1.0f), 10000.0f, 0.4f, 9000.0f);
-
-    
 
 }
 
@@ -153,6 +139,7 @@ void Core::loopFunction(const double &deltaTime, const double &elapsedTime)
 	Logic::lateUpdate();
 	//renderer.renderShadows();
 	renderer.render();
+
 }
 
 /* This function is executed when terminatingthe renderer */
