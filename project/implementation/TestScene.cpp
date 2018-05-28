@@ -24,6 +24,7 @@
 #include "ParticleSystem.h"
 #include "StartLineRenderer.cpp"
 #include "UIRenderer.cpp"
+#include "BaseRenderer.cpp"
 
 class TestScene : public Scene {
 public:
@@ -66,10 +67,18 @@ public:
 		WheelRF->getComponent<Transform>()->setPosition(vmml::Vector3f(-0.64f, 0.2f, -1.125f));
 
 
-		//Environment
+		//Track
 		GameObject *Track = instanciate("Track");
+		Track->getComponent<Transform>()->setScale(vmml::Vector3f(2.f, 2.f, 2.f));
+		Track->getComponent<Transform>()->setPosition(vmml::Vector3f(0.f, .1f, 0.f));
 		Track->addComponent<TrackRenderer>();
 
+		GameObject *Base = instanciate("Base");
+		Base->getComponent<Transform>()->setScale(vmml::Vector3f(2.f, 1.f, 2.f));
+		Base->addComponent<BaseRenderer>();
+
+
+		//Environment
 		GameObject *Tree = instanciate("Tree");
 		Tree->addComponent<TreeRenderer>();
 		Tree->addComponent<SphereCollider>()->setRadius(1.1f);
