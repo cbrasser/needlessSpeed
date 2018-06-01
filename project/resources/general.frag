@@ -34,10 +34,10 @@ void main()
     mediump mat3 tbn = mat3(t, b, n);
 
     //Normal Map
-    mediump vec3 BumpMapNormal = texture2D(NormalMap, texCoordVarying.st).xyz;
-    BumpMapNormal = 2.0 * BumpMapNormal - vec3(1.0, 1.0, 1.0);
-    n = tbn * BumpMapNormal;
-    n = normalize(n);
+   mediump vec3 BumpMapNormal = texture2D(NormalMap, texCoordVarying.st).xyz;
+   BumpMapNormal = 2.0 * BumpMapNormal - vec3(1.0, 1.0, 1.0);
+   n = tbn * BumpMapNormal;
+   n = normalize(n);
 
 
     mediump vec3 l = normalize(LightDirectionVarying);
