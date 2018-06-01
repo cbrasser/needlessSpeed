@@ -24,7 +24,8 @@
 #include "ParticleSystem.h"
 #include "StartLineRenderer.cpp"
 #include "UIRenderer.cpp"
-#include "BaseRenderer.cpp"
+#include "TirestackRenderer.cpp"
+#include "ForestRenderer.cpp"
 
 class TestScene : public Scene {
 public:
@@ -70,24 +71,37 @@ public:
 		//Track
 		GameObject *Track = instanciate("Track");
 		Track->getComponent<Transform>()->setScale(vmml::Vector3f(2.f, 2.f, 2.f));
-		Track->getComponent<Transform>()->setPosition(vmml::Vector3f(0.f, .1f, 0.f));
+		Track->getComponent<Transform>()->setPosition(vmml::Vector3f(0.f, 0.1f, 0.f));
 		Track->addComponent<TrackRenderer>();
-
-		GameObject *Base = instanciate("Base");
-		Base->getComponent<Transform>()->setScale(vmml::Vector3f(2.f, 1.f, 2.f));
-		Base->addComponent<BaseRenderer>();
 
 
 		//Environment
+		GameObject *Forest = instanciate("Forest");
+		Forest->getComponent<Transform>()->setScale(vmml::Vector3f(2.3f, 1.f, 2.3f));
+		Forest->getComponent<Transform>()->setPosition(vmml::Vector3f(20.f, -0.5f, 8.f));
+		Forest->addComponent<ForestRenderer>();
+
+		GameObject *Forest2 = instanciate("Forest2");
+		Forest2->getComponent<Transform>()->setScale(vmml::Vector3f(2.5f, 1.f, 2.5f));
+		Forest2->getComponent<Transform>()->setPosition(vmml::Vector3f(20.f, -0.5f, 8.f));
+		Forest2->addComponent<ForestRenderer>();
+
 		GameObject *Tree = instanciate("Tree");
+		Tree->getComponent<Transform>()->setScale(vmml::Vector3f(1.5f, 1.5f, 1.5f));
 		Tree->addComponent<TreeRenderer>();
 		Tree->addComponent<SphereCollider>()->setRadius(1.1f);
 		Tree->getComponent<Transform>()->setPosition(vmml::Vector3f(5.f, 0.f, 0.f));
 
 		GameObject *Tree2 = instanciate("Tree2");
+		Tree2->getComponent<Transform>()->setScale(vmml::Vector3f(1.5f, 1.5f, 1.5f));
 		Tree2->addComponent<TreeRenderer>();
 		Tree2->addComponent<SphereCollider>()->setRadius(1.1f);
 		Tree2->getComponent<Transform>()->setPosition(vmml::Vector3f(5.f, 0.f, 5.f));
+
+		GameObject *Tirestack = instanciate("Tirestack");
+		Tirestack->addComponent<TirestackRenderer>();
+		//Tirestack->addComponent<SphereCollider>()->setRadius(1.1f); TO DO
+		Tirestack->getComponent<Transform>()->setPosition(vmml::Vector3f(0.f, 0.f, 6.f));
 
 
 		//Timing Markers

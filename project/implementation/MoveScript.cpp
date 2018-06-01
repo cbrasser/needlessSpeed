@@ -52,7 +52,7 @@ public:
             
             if (TheRenderer::Instance()->renderer->isRunning()) {
                 //We are driving forwards
-                std::cout << "gyroscope angle: " << (TheRenderer::Instance()->renderer->getInput()->getGyroscopeRoll()) << std::endl;
+                //std::cout << "gyroscope angle: " << (TheRenderer::Instance()->renderer->getInput()->getGyroscopeRoll()) << std::endl;
                 if(velocityForAcceleration>intervalLimit){
                     
                     //Accelerating further
@@ -199,7 +199,7 @@ public:
     
     void Update() {
 
-		std::cout << "Movement Script Boolean" << isCollision << std::endl;
+		//std::cout << "Movement Script Boolean" << isCollision << std::endl;
 
         position = transform->getPosition();
         
