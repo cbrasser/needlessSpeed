@@ -310,10 +310,14 @@ void main()
 
 INFO: Created shader 'general'.
 INFO: Number of available tex units: 32.
-SYSTEM: loading Model: Track.obj
-INFO: mtllib Track.mtl
-INFO: o Terrain_Cube.002
-INFO: usemtl Track.002
+SYSTEM: loading Model: TrackNew.obj
+INFO: mtllib TrackNew.mtl
+INFO: o Track_Plane.002
+INFO: usemtl IndyRoad
+SYSTEM: loading Model: Base.obj
+INFO: mtllib Base.mtl
+INFO: o Base_Plane
+INFO: usemtl Grass
 SYSTEM: Trying to load shader file tree.vert
 SYSTEM: Trying to load shader file tree.frag
 INFO: Loaded shader code: 
@@ -426,4 +430,607 @@ SYSTEM: loading Model: Tree.obj
 INFO: mtllib Tree.mtl
 INFO: o Tree_Low_Cylinder
 INFO: usemtl Tree
+SYSTEM: Trying to load shader file marker.vert
+SYSTEM: Trying to load shader file marker.frag
+INFO: Loaded shader code: 
+
+INFO: #version 130
+
+uniform mediump mat4 ViewMatrix;
+uniform mediump mat4 ModelMatrix;
+uniform mediump mat4 ProjectionMatrix;
+
+uniform mediump vec4 EyePos;
+
+attribute vec4 Position;
+attribute vec3 Normal;
+attribute vec3 Tangent;
+attribute vec4 TexCoord;
+
+varying lowp vec4 diffuseVarying;
+varying lowp vec4 texCoordVarying;
+
+varying mediump vec4 posVarying;        // pos in world space
+varying mediump vec3 normalVarying;     // normal in world space
+varying mediump vec3 tangentVarying;    // tangent in world space
+
+void main()
+{
+    posVarying = ModelMatrix * Position;
+    texCoordVarying = TexCoord;
+    
+    gl_Position = ProjectionMatrix * ViewMatrix * posVarying;
+}
+
+INFO: #version 130
+
+uniform mediump mat4 ViewMatrix;
+uniform mediump mat4 ModelMatrix;
+uniform mediump mat4 ProjectionMatrix;
+
+uniform mediump mat3 NormalMatrix;
+
+varying lowp vec4 texCoordVarying;
+
+varying mediump vec4 posVarying;        // pos in world space
+varying mediump vec3 normalVarying;     // normal in world space
+varying mediump vec3 tangentVarying;    // tangent in world space
+
+void main()
+{         
+	gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+	//gl_FragColor = lightColor * modelTexture;
+	//gl_FragColor = modelTexture;
+}
+
+INFO: Created shader 'marker'.
+INFO: Number of available tex units: 32.
+SYSTEM: loading Model: Cube.obj
+INFO: mtllib Cube.mtl
+INFO: o Cube
+INFO: usemtl Cube
+INFO: Generated shader code: 
+
+INFO: #version 120
+varying vec2 texCoordVarying;
+varying vec3 normalVaryingViewSpace;
+uniform mat4 ModelViewMatrix;
+uniform mat4 ProjectionMatrix;
+attribute vec4 Position;
+attribute vec3 Normal;
+attribute vec3 Tangent;
+attribute vec3 Bitangent;
+attribute vec4 TexCoord;
+void main() {
+vec4 posViewSpace = ModelViewMatrix*Position;
+float lightDistance = 0.0;
+texCoordVarying = TexCoord.st;
+normalVaryingViewSpace = mat3(ModelViewMatrix)*Normal;
+gl_Position = ProjectionMatrix*posViewSpace;
+}
+
+INFO: #version 120
+varying vec2 texCoordVarying;
+varying vec3 normalVaryingViewSpace;
+uniform sampler2D DiffuseMap;
+uniform sampler2D NormalMap;
+uniform sampler2D SpecularMap;
+uniform sampler2D CharacterMap;
+uniform vec3 ambientColor;
+uniform vec3 Ka;
+uniform vec3 Kd;
+uniform vec3 Ks;
+uniform float Ns;
+void main() {
+vec4 diffuse = vec4(1.0,1.0,1.0,1.0);
+vec3 surfaceNormal = normalize(normalVaryingViewSpace);
+float intensity = 0.0;
+diffuse = diffuse * vec4(Kd,1.0);
+gl_FragColor = clamp(diffuse, 0.0, 1.0);
+gl_FragColor.a *= texture2D(CharacterMap, texCoordVarying).r;
+}
+INFO: Created shader 'Lap Timer'.
+INFO: Number of available tex units: 32.
 SYSTEM: Renderer started
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0
+Movement Script Boolean0

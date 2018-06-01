@@ -107,6 +107,11 @@ void Core::initFunction()
     bRenderer().getObjects()->createCamera("camera", vmml::Vector3f(0.f, -4.5f, -3.0f), vmml::Vector3f(-0.5f, 0.f, 0.f));
 	bRenderer().getObjects()->createCamera("shadowCamera", vmml::Vector3f(0.f, -35.5f, 4.0f), vmml::Vector3f(-1.3f, 0.f, 0.f));
 
+	bRenderer().getObjects()->createFramebuffer("fbo");	
+	bRenderer().getObjects()->createDepthMap("depthMap", 1024, 1024);	// create texture to bind to the fbo
+
+
+
 	bRenderer().getObjects()->loadTexture("colorLUT.png");
     //bRenderer().getObjects()->createCamera("camera", vmml::Vector3f(0.0f, 0.0f, 10.0f), vmml::Vector3f(0.f, 0.0f, 0.f));
     

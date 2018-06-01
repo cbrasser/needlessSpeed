@@ -181,7 +181,7 @@ public:
             	if(velocityForAcceleration ==0){
             		newTurning += 0.0;
             	} else {
-            		newTurning -= 1.0 * velocityForAcceleration/20;
+            		newTurning -= 1.0;
             	}
                 
             }
@@ -189,7 +189,7 @@ public:
                 if(velocityForAcceleration == 0){
                 	newTurning +=0.0;
                 }else {
-                	newTurning +=1.0 * velocityForAcceleration/20;
+                	newTurning +=1.0;
                 } 
             }
             
@@ -239,9 +239,9 @@ public:
         vmml::Vector3f acceleration = accelerating*carDir;
         
         velocity += acceleration;
-        
-        if(abs>15.0f){
-            velocity = vmml::normalize(velocity)*15.0f;
+        //Max speed
+        if(abs>35.0f){
+            velocity = vmml::normalize(velocity)*35.0f;
         }
         
         
