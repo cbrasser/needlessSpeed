@@ -27,7 +27,7 @@ public:
 		}
 	}
 
-	void render(std::string cameraName) override {
+	void render(std::string cameraName, ShaderPtr customShader) override {
 
 		float titleScale = 0.08f;
 		vmml::Matrix4f scaling = vmml::create_scaling(vmml::Vector3f(titleScale / TheRenderer::Instance()->renderer->getView()->getAspectRatio(), titleScale, titleScale));

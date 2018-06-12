@@ -27,11 +27,19 @@ public:
 		}
 	}
 
-	void render(std::string cameraName) override {
+	void render(std::string cameraName, ShaderPtr customShader) override {
+
+		ShaderPtr shader;
+		if(customShader == nullptr){
+			shader = TheRenderer::Instance()->renderer->getObjects()->getShader("car");
+		} else {
+			shader = customShader;
+		}
+
 		vmml::Matrix4f modelMatrix = gameObject->getComponent<Transform>()->getTransformationMatrix();
 		TexturePtr colorLUT = TheRenderer::Instance()->renderer->getObjects()->getTexture("colorLUT");
 
-		ShaderPtr shader = TheRenderer::Instance()->renderer->getObjects()->getShader("car");
+		//ShaderPtr shader = TheRenderer::Instance()->renderer->getObjects()->getShader("car");
 		vmml::Matrix4f viewMatrix = TheRenderer::Instance()->renderer->getObjects()->getCamera("camera")->getViewMatrix();
 
 		//Light Calculations

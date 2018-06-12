@@ -39,8 +39,15 @@ public:
 
 	}
     
-	void render(std::string cameraName) override {
-		ShaderPtr flareShader = TheRenderer::Instance()->renderer->getObjects()->getShader("flare");
+	void render(std::string cameraName, ShaderPtr customShader) override {
+
+		ShaderPtr flareShader;
+		if(customShader == nullptr){
+			flareShader = TheRenderer::Instance()->renderer->getObjects()->getShader("flare");
+		} else {
+			flareShader = customShader;
+		}
+		//ShaderPtr flareShader = TheRenderer::Instance()->renderer->getObjects()->getShader("flare");
 
 
 		TexturePtr texturePtr1 = TheRenderer::Instance()->renderer->getObjects()->getTexture("lensFlare1");

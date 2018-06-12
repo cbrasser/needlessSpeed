@@ -83,9 +83,14 @@ void Core::init()
 
 void Core::initFunction()
 {
+
+
 	// get OpenGL and shading language version
 	bRenderer::log("OpenGL Version: ", glGetString(GL_VERSION));
 	bRenderer::log("Shading Language Version: ", glGetString(GL_SHADING_LANGUAGE_VERSION));
+
+				 		std::cout<< "-----------------------------------------------\n";	
+
 
 	acceleration = 0.0f;
 	turning = 0.0f;
@@ -98,19 +103,30 @@ void Core::initFunction()
 	_running = true;
 	 _lastStateSpaceKey = bRenderer::INPUT_UNDEFINED;
 
+
+
 	// set shader versions (optional)
 	bRenderer().getObjects()->setShaderVersionDesktop("#version 120");
 	bRenderer().getObjects()->setShaderVersionES("#version 100");
 	_viewMatrixHUD = Camera::lookAt(vmml::Vector3f(0.0f, 0.0f, 0.25f), vmml::Vector3f::ZERO, vmml::Vector3f::UP);
 
+
+
+	ShaderPtr uiShader = bRenderer().getObjects()->loadShaderFile("uishader", 0, false, false, false, false, false);
+	MaterialPtr blurMaterial = bRenderer().getObjects()->createMaterial("blurMaterial", uiShader);								// create an empty material to assign either texture1 or texture2 to
+
+	std::cout<< "-----------------------------------------------\n";	
+
+
     // Create camera
     bRenderer().getObjects()->createCamera("camera", vmml::Vector3f(0.f, -4.5f, -3.0f), vmml::Vector3f(-0.5f, 0.f, 0.f));
-	bRenderer().getObjects()->createCamera("shadowCamera", vmml::Vector3f(0.f, -35.5f, 4.0f), vmml::Vector3f(-1.3f, 0.f, 0.f));
+	bRenderer().getObjects()->createCamera("shadowCamera", vmml::Vector3f(0.f, -100.5f, 0.0f), vmml::Vector3f(-1.5f, 0.f, 0.f));
+
 
 	bRenderer().getObjects()->createFramebuffer("fbo");	
-	bRenderer().getObjects()->createDepthMap("depthMap", 1024, 1024);	// create texture to bind to the fbo
+	DepthMapPtr dpr = bRenderer().getObjects()->createDepthMap("depthMap", 1024, 1024);	// create texture to bind to the fbo
 
-
+	bRenderer().getObjects()->createSprite("sprite",blurMaterial);															// create a sprite using the material created above
 
 	bRenderer().getObjects()->loadTexture("colorLUT.png");
     //bRenderer().getObjects()->createCamera("camera", vmml::Vector3f(0.0f, 0.0f, 10.0f), vmml::Vector3f(0.f, 0.0f, 0.f));
@@ -131,8 +147,10 @@ void Core::initFunction()
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void Core::loopFunction(const double &deltaTime, const double &elapsedTime)
 {
-	theTime.setTime(deltaTime, elapsedTime);
 
+
+
+	theTime.setTime(deltaTime, elapsedTime);
 	// Update Physics for collisions
 	accumulatedTime += deltaTime;
 	if (accumulatedTime > FIXED_TIME_INTERVAL) {
@@ -142,8 +160,14 @@ void Core::loopFunction(const double &deltaTime, const double &elapsedTime)
 
 	Logic::update();
 	Logic::lateUpdate();
-	//renderer.renderShadows();
+	renderer.renderShadows();
 	renderer.render();
+	vmml::Matrix4f modelMatrix = vmml::create_translation(vmml::Vector3f(0.0f, 0.0f, -0.5));
+	//bRenderer().getObjects()->getFramebuffer("fbo")->bindDepthMap(bRenderer().getObjects()->getTexture("depthMap"));
+	bRenderer().getObjects()->getMaterial("blurMaterial")->setTexture("fbo_texture", bRenderer().getObjects()->getTexture("depthMap"));
+	bRenderer().getModelRenderer()->drawModel(bRenderer().getObjects()->getModel("sprite"), modelMatrix, _viewMatrixHUD, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), false);
+
+
 
 }
 

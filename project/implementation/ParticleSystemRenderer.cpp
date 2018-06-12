@@ -33,7 +33,7 @@ public:
         }
 	}
     
-	void render(std::string cameraName) override {
+	void render(std::string cameraName, ShaderPtr customShader) override {
 
         // Keyboard and touch inputs for testing purposes
 //		GLint currentG = TheRenderer::Instance()->renderer->getInput()->getKeyState(bRenderer::KEY_G);
@@ -57,8 +57,15 @@ public:
 //            }
 //
 //        }
+
+		ShaderPtr spriteShader;
+		if(customShader == nullptr){
+			spriteShader = TheRenderer::Instance()->renderer->getObjects()->getShader("sprite");
+		} else {
+			spriteShader = customShader;
+		}
         
-		ShaderPtr spriteShader = TheRenderer::Instance()->renderer->getObjects()->getShader("sprite");
+		//ShaderPtr spriteShader = TheRenderer::Instance()->renderer->getObjects()->getShader("sprite");
 
 		TexturePtr texturePtr = TheRenderer::Instance()->renderer->getObjects()->getTexture("dirtSprite");
 		TexturePtr colorLUT = TheRenderer::Instance()->renderer->getObjects()->getTexture("colorLUT");

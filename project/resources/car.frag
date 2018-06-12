@@ -1,6 +1,5 @@
 #version 130
 
-
 uniform highp mat4 ViewMatrix;
 uniform highp mat4 ModelMatrix;
 uniform highp mat4 ProjectionMatrix;
@@ -15,12 +14,30 @@ varying highp vec3 LightDirectionVarying; // Value for light direction
 uniform sampler2D NormalMap;
 uniform sampler2D DiffuseMap;
 uniform sampler2D ColorLUT; // Lookup Texture
+uniform sampler2D shadowMap;
 
 varying highp vec4 texCoordVarying;
 
 varying highp vec4 posVarying;        // pos in world space
 varying highp vec3 normalVarying;     // normal in world space
 varying highp vec3 tangentVarying;    // tangent in world space
+varying highp vec4 fragPosLightSpace;
+
+float ShadowCalculation(vec4 fragPosLightSpace)
+{
+    // perform perspective divide
+    vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
+    // transform to [0,1] range
+    projCoords = projCoords * 0.5 + 0.5;
+    // get closest depth value from light's perspective (using [0,1] range fragPosLight as coords)
+    float closestDepth = texture(shadowMap, projCoords.xy).r; 
+    // get depth of current fragment from light's perspective
+    float currentDepth = projCoords.z;
+    // check whether current frag pos is in shadow
+    float shadow = currentDepth > closestDepth  ? 1.0 : 0.0;
+
+    return shadow;
+} 
 
 void main()
 { 
@@ -37,8 +54,11 @@ void main()
     highp float timeOfDay = clamp(DayNightPulseVarying, 0.05, 0.95); //limit with clamp, so there is not overflow when looking up the colors in the lut (avoids highlighting around the edges)
     highp float strength = 1.0; // Can be use to adjust the global amount of lightColor
     highp vec4 lightColor = texture2D(ColorLUT, vec2(intensity, timeOfDay)) * vec4(strength, strength, strength, 1.0);
+    //highp float shadow = ShadowCalculation(fs_in.FragPosLightSpace);       
+    //highp vec3 lighting = (ambient + (1.0 - shadow) * (diffuse + specular)) * color;    
 
 	//gl_FragColor = vec4(n, 1.0);
 	gl_FragColor = lightColor * modelTexture;
 	//gl_FragColor = modelTexture;
 }
+

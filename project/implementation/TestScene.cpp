@@ -13,11 +13,7 @@
 #include "FreeCameraScript.cpp"
 #include "RotationScript.cpp"
 #include "SphereCollider.cpp"
-#include "ShipScript.cpp"
 #include "MoveScript.cpp"
-#include "LaserManager.cpp"
-#include "LaserScript.cpp"
-#include "StickToFrontScript.cpp"
 #include "TreeRenderer.cpp"
 #include "CameraWrapper.cpp"
 #include "ParticleSystemRenderer.cpp"
@@ -122,7 +118,7 @@ public:
 		GameObject *Camera = instanciate("Camera");
 		Camera->addComponent<FreeCameraScript>();	
 
-		//GameObject *ShadowCamera = instanciate("Camera");
+		GameObject *ShadowCamera = instanciate("Camera");
 		//ShadowCamera->addComponent<FreeCameraScript>();
 
 

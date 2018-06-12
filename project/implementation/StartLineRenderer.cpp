@@ -19,11 +19,18 @@ public:
 		}
 	}
 
-	void render(std::string cameraName) override {
+	void render(std::string cameraName, ShaderPtr customShader) override {
+
+		ShaderPtr shader;
+		if(customShader == nullptr){
+			shader = TheRenderer::Instance()->renderer->getObjects()->getShader("marker");
+		} else {
+			shader = customShader;
+		}
 
 		vmml::Matrix4f modelMatrix = gameObject->getComponent<Transform>()->getTransformationMatrix();
 
-		ShaderPtr shader = TheRenderer::Instance()->renderer->getObjects()->getShader("marker");
+		//ShaderPtr shader = TheRenderer::Instance()->renderer->getObjects()->getShader("marker");
 		vmml::Matrix4f viewMatrix = TheRenderer::Instance()->renderer->getObjects()->getCamera("camera")->getViewMatrix();
 
 		if (shader.get())

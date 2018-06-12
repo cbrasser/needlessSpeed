@@ -22,19 +22,32 @@ void TheRenderer::init() {
 }
 
 void TheRenderer::renderShadows() {
+
+
+	GLint defaultFBO = Framebuffer::getCurrentFramebuffer();
+	renderer->getObjects()->getFramebuffer("fbo")->bindDepthMap(renderer->getObjects()->getDepthMap("depthMap"), false);
+	std::cout<<"--------------------------------------------------\n";
+	ShaderPtr shadowShader = renderer->getObjects()->loadShaderFile("shadow", 0, false, false, false, false, false);
+
+	
+
 	for (std::vector<ObjectRenderer*>::iterator it = renderQueue.begin(); it != renderQueue.end(); ++it) {
 		if ((*it)->getEnable())
-			(*it)->render("shadowCamera");
+			(*it)->render("shadowCamera",shadowShader);
 	}
+
 
 	renderer->getModelRenderer()->drawQueue(/*GL_LINES*/);
 	renderer->getModelRenderer()->clearQueue();
+	renderer->getObjects()->getFramebuffer("fbo")->unbind(defaultFBO);
+
 }
 
 void TheRenderer::render() {
+	ShaderPtr ptr = NULL;
 	for (std::vector<ObjectRenderer*>::iterator it = renderQueue.begin(); it != renderQueue.end(); ++it) {
 		if ((*it)->getEnable())
-			(*it)->render("camera");
+			(*it)->render("camera",ptr);
 	}
 
 	renderer->getModelRenderer()->drawQueue(/*GL_LINES*/);

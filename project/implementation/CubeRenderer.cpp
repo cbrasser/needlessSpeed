@@ -43,7 +43,14 @@ public:
         }
     }
     
-	void render(std::string cameraName) override {
+	void render(std::string cameraName, ShaderPtr customShader) override {
+
+        ShaderPtr shader;
+        if(customShader == nullptr){
+            shader = TheRenderer::Instance()->renderer->getObjects()->getShader("sky");
+        } else {
+            shader = customShader;
+        }
     
         vmml::Matrix4f modelMatrix = gameObject->getComponent<Transform>()->getTransformationMatrix();
         
@@ -55,7 +62,7 @@ public:
         // Update position of skybox as camera moves
         gameObject->getComponent<Transform>()->setPosition(TheRenderer::Instance()->renderer->getObjects()->getCamera(cameraName)->getPosition());
 
-        ShaderPtr shader = TheRenderer::Instance()->renderer->getObjects()->getShader("sky");
+        //ShaderPtr shader = TheRenderer::Instance()->renderer->getObjects()->getShader("sky");
         
         // Keep the camera centered in the skybox by setting the last column of the view matrix to zero so that
         // the skybox can still rotate with the camera but it is not traslated anymore
