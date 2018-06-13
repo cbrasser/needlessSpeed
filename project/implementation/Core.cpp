@@ -4,8 +4,10 @@
 #include "TheTime.h"
 #include "Logic.h"
 #include "Physics.h"
-#include "PostProcessing.h"
+
 #include "TestScene.cpp"
+#include "StartScene.cpp"
+#include "CrashScene.cpp"
 
 //Needed to have Visual Studio recompile core.cpp in all incremental builds. Does not do anything, but can be changed to code is updated and recompile triggered
 //bool justAnotherBoolInTheWall = false;
@@ -15,7 +17,6 @@ TheRenderer renderer;
 TheTime theTime;
 Logic logic;
 Physics physics;
-PostProcessing postProcessing;
 ObjectManager o;
 
 //Variables for physics/collision detection
@@ -43,14 +44,9 @@ GLfloat directionFloat = 0.0f;
 GLfloat treeAnimation = 0.0f;
 
 bool isDebug = false;
-bool doPostProcessing = true;
 bool isTouched;
 DepthMapPtr dpr;
 
-
-const vmml::Vector3f greenLight = vmml::Vector3f(0.0f, 1.0f, 0.0f);
-const vmml::Vector3f lightBlueLight = vmml::Vector3f(0.5f, 0.5f, 1.0f);
-const vmml::Vector3f whiteLight = vmml::Vector3f(1.0f, 1.0f, 1.0f);
 
 vmml::Vector3f cameraPosition;
 
@@ -135,10 +131,12 @@ void Core::initFunction()
     //bRenderer().getObjects()->createCamera("camera", vmml::Vector3f(0.0f, 0.0f, 10.0f), vmml::Vector3f(0.f, 0.0f, 0.f));
     
     // Create scenes
-	SceneManager::addScene("Test", new TestScene);
+	SceneManager::addScene("Start", new StartScene); //Start Menu Scene
+	SceneManager::addScene("Test", new TestScene); //Game Scene
+	SceneManager::addScene("Crash", new CrashScene); //Crash Scene
 
 	renderer.setRenderer(&bRenderer(), &_running);
-	SceneManager::loadScene("Test");
+	SceneManager::loadScene("Start");
     
     // Set starting postion
     //bRenderer().getObjects()->getCamera("camera")->setPosition(vmml::Vector3f(-50, 480, -580));
@@ -161,6 +159,62 @@ void Core::loopFunction(const double &deltaTime, const double &elapsedTime)
 		accumulatedTime = 0;
 	}
 
+
+
+	//Inputs for Scenes WINDOWS
+	GLint current1 = TheRenderer::Instance()->renderer->getInput()->getKeyState(bRenderer::KEY_1);
+
+	if (current1 != last1) {
+		last1 = current1;
+		if (current1 == bRenderer::INPUT_PRESS) {
+			SceneManager::loadScene("Test");
+		}
+	}
+
+
+	//Inputs for Scenes IOS
+	TouchMap touchMap = TheRenderer::Instance()->renderer->getInput()->getTouches();
+
+	//Start Scene, so any touch should start the game
+	if (SceneManager::getCurrentName().compare("Start") == 0) {
+		for (auto t = touchMap.begin(); t != touchMap.end(); ++t)
+		{
+			SceneManager::loadScene("Test");
+		}
+	}
+
+	//If the game is running
+	if (SceneManager::getCurrentName().compare("Test") == 0) {
+
+		std::vector<GameObject*> livingObjects = SceneManager::getCurrentScene()->gameObjectList;
+
+		bool carAlive = false;
+		for (std::vector<GameObject*>::iterator it = livingObjects.begin(); it != livingObjects.end(); ++it) {
+			if ((*it)->name.find("Car") != std::string::npos) {
+				carAlive = true;
+			}
+		}
+
+		//Go to end screen if player crashed the spaceship (LOST)
+		if (!carAlive) {
+			SceneManager::loadScene("Crash");
+		}
+
+		//If crash menu then restart the game by tapping
+		isTouched = false;
+		if (SceneManager::getCurrentName().compare("Crash") == 0) {
+
+			touchMap.clear();
+			touchMap = TheRenderer::Instance()->renderer->getInput()->getTouches();
+			for (auto t = touchMap.begin(); t != touchMap.end(); ++t)
+			{
+				SceneManager::loadScene("Test");
+			}
+		}
+
+	}
+
+
 	Logic::update();
 	Logic::lateUpdate();
 	renderer.renderShadows();
@@ -175,6 +229,7 @@ void Core::loopFunction(const double &deltaTime, const double &elapsedTime)
 
 
 }
+
 
 /* This function is executed when terminatingthe renderer */
 void Core::terminateFunction()
