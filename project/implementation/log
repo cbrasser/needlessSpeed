@@ -4,47 +4,6 @@ SYSTEM: Using GLEW 1.13.0
 INFO: OpenGL Version: 3.0 Mesa 17.2.8
 INFO: Shading Language Version: 1.30
 -----------------------------------------------
-SYSTEM: Trying to load shader file uishader.vert
-SYSTEM: Trying to load shader file uishader.frag
-INFO: Loaded shader code: 
-
-INFO: #version 130
-
-uniform mat4 ModelViewMatrix;
-uniform mat4 ProjectionMatrix;
-
-attribute vec4 Position;
-attribute vec4 TexCoord;
-
-varying vec4 texCoordVarying;
-
-
-void main()
-{
-    texCoordVarying = TexCoord;
-    gl_Position = ProjectionMatrix * ModelViewMatrix * Position;
-    
-    
-    
-    
-    
-}
-
-INFO: #version 130
-
-uniform sampler2D fbo_texture;
-
-varying vec4 texCoordVarying;
-
-void main()
-{
-    gl_FragColor = texture2D(fbo_texture, texCoordVarying.xy);
-}
-    
-
-INFO: Created shader 'uishader'.
-INFO: Number of available tex units: 32.
------------------------------------------------
 =========================
 SYSTEM: Trying to load shader file sprite.vert
 SYSTEM: Trying to load shader file sprite.frag
@@ -224,7 +183,7 @@ float ShadowCalculation(vec4 fragPosLightSpace)
     // transform to [0,1] range
     projCoords = projCoords * 0.5 + 0.5;
     // get closest depth value from light's perspective (using [0,1] range fragPosLight as coords)
-    float closestDepth = texture(shadowMap, projCoords.xy).r; 
+    float closestDepth = texture2D(shadowMap, projCoords.xy).r; 
     // get depth of current fragment from light's perspective
     float currentDepth = projCoords.z;
     // check whether current frag pos is in shadow
@@ -239,6 +198,7 @@ void main()
     highp vec3 n = normalize(normalVarying);   
 
     highp vec3 l = normalize(LightDirectionVarying);
+
     
     highp float intensity = dot(l, n);
     intensity = clamp(intensity, 0.05, 0.95); //limit with clamp, so there is not overflow when looking up the colors in the lut (avoids highlighting around the edges)
@@ -248,8 +208,15 @@ void main()
     highp float timeOfDay = clamp(DayNightPulseVarying, 0.05, 0.95); //limit with clamp, so there is not overflow when looking up the colors in the lut (avoids highlighting around the edges)
     highp float strength = 1.0; // Can be use to adjust the global amount of lightColor
     highp vec4 lightColor = texture2D(ColorLUT, vec2(intensity, timeOfDay)) * vec4(strength, strength, strength, 1.0);
-    //highp float shadow = ShadowCalculation(fs_in.FragPosLightSpace);       
-    //highp vec3 lighting = (ambient + (1.0 - shadow) * (diffuse + specular)) * color;    
+    highp float shadow = ShadowCalculation(fragPosLightSpace); 
+    if(shadow==0.0){
+        //shadow
+        lightColor = texture2D(ColorLUT, vec2(intensity, 0.90)) * vec4(strength, strength, strength, 1.0);
+        }else{
+            //not in shadow
+        lightColor = texture2D(ColorLUT, vec2(intensity, 0.05)) * vec4(strength, strength, strength, 1.0);
+        }   
+    // highp vec3 lighting = (ambient + (1.0 - shadow) * (diffuse + specular)) * color;    
 
 	//gl_FragColor = vec4(n, 1.0);
 	gl_FragColor = lightColor * modelTexture;
@@ -292,6 +259,8 @@ attribute vec4 TexCoord;
 varying lowp vec4 diffuseVarying;
 varying lowp vec4 texCoordVarying;
 
+
+varying highp vec4 fragPosLightSpace;
 varying mediump vec4 posVarying;        // pos in world space
 varying mediump vec3 normalVarying;     // normal in world space
 varying mediump vec3 tangentVarying;    // tangent in world space
@@ -305,6 +274,7 @@ void main()
     normalVarying = normalize(NormalMatrix * Normal);
     tangentVarying = normalize(NormalMatrix * Tangent);
     texCoordVarying = TexCoord;
+    fragPosLightSpace = ViewMatrix * Position;
 
     DayNightPulseVarying = DayNightPulse;
     LightDirectionVarying = LightDirection;
@@ -407,6 +377,7 @@ attribute vec4 TexCoord;
 varying lowp vec4 diffuseVarying;
 varying lowp vec4 texCoordVarying;
 
+varying highp vec4 fragPosLightSpace;
 varying mediump vec4 posVarying;        // pos in world space
 varying mediump vec3 normalVarying;     // normal in world space
 varying mediump vec3 tangentVarying;    // tangent in world space
@@ -420,6 +391,9 @@ void main()
     normalVarying = normalize(NormalMatrix * Normal);
     tangentVarying = normalize(NormalMatrix * Tangent);
     texCoordVarying = TexCoord * TreeAnimation;
+
+        fragPosLightSpace = ViewMatrix * Position;
+
 
     DayNightPulseVarying = DayNightPulse;
     LightDirectionVarying = LightDirection;
@@ -442,12 +416,31 @@ varying mediump vec3 LightDirectionVarying; // Value for light direction
 uniform sampler2D NormalMap;
 uniform sampler2D DiffuseMap;
 uniform sampler2D ColorLUT; // Lookup Texture
+uniform sampler2D shadowMap;
 
 varying lowp vec4 texCoordVarying;
 
 varying mediump vec4 posVarying;        // pos in world space
 varying mediump vec3 normalVarying;     // normal in world space
 varying mediump vec3 tangentVarying;    // tangent in world space
+varying highp vec4 fragPosLightSpace;
+
+
+float ShadowCalculation(vec4 fragPosLightSpace)
+{
+    // perform perspective divide
+    vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
+    // transform to [0,1] range
+    projCoords = projCoords * 0.5 + 0.5;
+    // get closest depth value from light's perspective (using [0,1] range fragPosLight as coords)
+    float closestDepth = texture(shadowMap, projCoords.xy).r; 
+    // get depth of current fragment from light's perspective
+    float currentDepth = projCoords.z;
+    // check whether current frag pos is in shadow
+    float shadow = currentDepth > closestDepth  ? 1.0 : 0.0;
+
+    return shadow;
+} 
 
 void main()
 { 
@@ -480,6 +473,16 @@ void main()
     lowp float timeOfDay = clamp(DayNightPulseVarying, 0.05, 0.95); //limit with clamp, so there is not overflow when looking up the colors in the lut (avoids highlighting around the edges)
     lowp float strength = 1.0; // Can be use to adjust the global amount of lightColor
     lowp vec4 lightColor = texture2D(ColorLUT, vec2(intensity, timeOfDay)) * vec4(strength, strength, strength, 1.0);
+
+     highp float shadow = ShadowCalculation(fragPosLightSpace); 
+    if(shadow==0.0){
+        //shadow
+        lightColor = texture2D(ColorLUT, vec2(intensity, 0.90)) * vec4(strength, strength, strength, 1.0);
+        }else{
+            //not in shadow
+        lightColor = texture2D(ColorLUT, vec2(intensity, 0.05)) * vec4(strength, strength, strength, 1.0);
+        }
+
 
 	//gl_FragColor = vec4(n, 1.0);
 	gl_FragColor = lightColor * modelTexture;
@@ -599,29 +602,48 @@ gl_FragColor.a *= texture2D(CharacterMap, texCoordVarying).r;
 INFO: Created shader 'Lap Timer'.
 INFO: Number of available tex units: 32.
 SYSTEM: Renderer started
---------------------------------------------------
-SYSTEM: Trying to load shader file shadow.vert
-SYSTEM: Trying to load shader file shadow.frag
+SYSTEM: Trying to load shader file uishader.vert
+SYSTEM: Trying to load shader file uishader.frag
 INFO: Loaded shader code: 
 
 INFO: #version 130
-attribute vec4 Position;
 
-uniform highp mat4 ViewMatrix;
-uniform highp mat4 ModelMatrix;
+uniform mat4 ViewMatrix;
+uniform mat4 ModelMatrix;
+uniform mat4 ProjectionMatrix;
+
+attribute vec4 Position;
+attribute vec4 TexCoord;
+
+varying vec4 texCoordVarying;
 
 
 void main()
 {
-    gl_Position = ViewMatrix * ModelMatrix * Position;
-}  
+    texCoordVarying = TexCoord;
+    highp mat4 ModelViewMatrix = ViewMatrix * ModelMatrix;
+    gl_Position = ProjectionMatrix * ModelViewMatrix * Position;
+     
+}
 
 INFO: #version 130
 
-void main()
-{             
-    // gl_FragDepth = gl_FragCoord.z;
-} 
+uniform sampler2D fbo_texture;
 
-INFO: Created shader 'shadow'.
+varying vec4 texCoordVarying;
+
+void main() 
+{
+    //float depthValue = texture(fbo_texture,texCoordVarying.xy).r;
+    //gl_FragColor = vec4(vec3(depthValue), 1.0);
+    //gl_FragColor = texture2D(fbo_texture, texCoordVarying.xy);
+
+}
+    
+
+INFO: Created shader 'uishader'.
 INFO: Number of available tex units: 32.
+INFO: (EX)TERMINATE
+SYSTEM: Renderer terminated
+INFO: RenderProject deleted
+press ENTER to quit

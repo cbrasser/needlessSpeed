@@ -31,10 +31,12 @@ public:
 		vmml::Matrix4f modelMatrix = gameObject->getComponent<Transform>()->getTransformationMatrix();
 
 		//ShaderPtr shader = TheRenderer::Instance()->renderer->getObjects()->getShader("marker");
-		vmml::Matrix4f viewMatrix = TheRenderer::Instance()->renderer->getObjects()->getCamera("camera")->getViewMatrix();
+		vmml::Matrix4f viewMatrix = TheRenderer::Instance()->renderer->getObjects()->getCamera(cameraName)->getViewMatrix();
 
 		if (shader.get())
 		{
+					shader->setUniform("shadowMap", TheRenderer::Instance()->renderer->getObjects()->getDepthMap("depthMap"));
+
 			shader->setUniform("ProjectionMatrix", vmml::Matrix4f::IDENTITY);
 			shader->setUniform("ViewMatrix", viewMatrix);
 			shader->setUniform("ModelMatrix", modelMatrix);

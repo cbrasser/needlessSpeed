@@ -45,6 +45,8 @@ GLfloat treeAnimation = 0.0f;
 bool isDebug = false;
 bool doPostProcessing = true;
 bool isTouched;
+DepthMapPtr dpr;
+
 
 const vmml::Vector3f greenLight = vmml::Vector3f(0.0f, 1.0f, 0.0f);
 const vmml::Vector3f lightBlueLight = vmml::Vector3f(0.5f, 0.5f, 1.0f);
@@ -112,21 +114,22 @@ void Core::initFunction()
 
 
 
-	ShaderPtr uiShader = bRenderer().getObjects()->loadShaderFile("uishader", 0, false, false, false, false, false);
-	MaterialPtr blurMaterial = bRenderer().getObjects()->createMaterial("blurMaterial", uiShader);								// create an empty material to assign either texture1 or texture2 to
+	//ShaderPtr uiShader = bRenderer().getObjects()->loadShaderFile("uishader", 0, false, false, false, false, false);
+	//MaterialPtr blurMaterial = bRenderer().getObjects()->createMaterial("blurMaterial", uiShader);								// create an empty material to assign either texture1 or texture2 to
 
-	std::cout<< "-----------------------------------------------\n";	
+	//std::cout<< "-----------------------------------------------\n";	
 
 
     // Create camera
     bRenderer().getObjects()->createCamera("camera", vmml::Vector3f(0.f, -4.5f, -3.0f), vmml::Vector3f(-0.5f, 0.f, 0.f));
-	bRenderer().getObjects()->createCamera("shadowCamera", vmml::Vector3f(0.f, -100.5f, 0.0f), vmml::Vector3f(-1.5f, 0.f, 0.f));
+	bRenderer().getObjects()->createCamera("shadowCamera", vmml::Vector3f(0.f, -100.5f, .0f), vmml::Vector3f(-1.57f, 0.f, 0.f));
+	//bRenderer().getObjects()->createCamera("shadowCamera", vmml::Vector3f(0.f, -4.5f, -3.0f), vmml::Vector3f(-0.5f, 0.f, 0.f));
 
 
 	bRenderer().getObjects()->createFramebuffer("fbo");	
-	DepthMapPtr dpr = bRenderer().getObjects()->createDepthMap("depthMap", 1024, 1024);	// create texture to bind to the fbo
+	dpr = bRenderer().getObjects()->createDepthMap("depthMap", 1024, 1024);	// create texture to bind to the fbo
 
-	bRenderer().getObjects()->createSprite("sprite",blurMaterial);															// create a sprite using the material created above
+	//bRenderer().getObjects()->createSprite("sprite",blurMaterial);															// create a sprite using the material created above
 
 	bRenderer().getObjects()->loadTexture("colorLUT.png");
     //bRenderer().getObjects()->createCamera("camera", vmml::Vector3f(0.0f, 0.0f, 10.0f), vmml::Vector3f(0.f, 0.0f, 0.f));
@@ -162,10 +165,12 @@ void Core::loopFunction(const double &deltaTime, const double &elapsedTime)
 	Logic::lateUpdate();
 	renderer.renderShadows();
 	renderer.render();
-	vmml::Matrix4f modelMatrix = vmml::create_translation(vmml::Vector3f(0.0f, 0.0f, -0.5));
+	//vmml::Matrix4f modelMatrix = vmml::create_translation(vmml::Vector3f(0.0f, 0.0f, -0.5));
 	//bRenderer().getObjects()->getFramebuffer("fbo")->bindDepthMap(bRenderer().getObjects()->getTexture("depthMap"));
-	bRenderer().getObjects()->getMaterial("blurMaterial")->setTexture("fbo_texture", bRenderer().getObjects()->getTexture("depthMap"));
-	bRenderer().getModelRenderer()->drawModel(bRenderer().getObjects()->getModel("sprite"), modelMatrix, _viewMatrixHUD, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), false);
+	//bRenderer().getObjects()->getMaterial("blurMaterial")->setTexture("fbo_texture", dpr);
+
+	//bRenderer().getModelRenderer()->drawModel(bRenderer().getObjects()->getModel("sprite"), modelMatrix, _viewMatrixHUD, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), false);
+	//std::cout<<"--------------------------------------------------3\n"<<std::endl;
 
 
 

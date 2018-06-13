@@ -33,11 +33,14 @@ public:
 			shader = TheRenderer::Instance()->renderer->getObjects()->getShader("car");
 		} else {
 			shader = customShader;
+			
 		}
-
+		ModelPtr model = TheRenderer::Instance()->renderer->getObjects()->getModel("car");
 		vmml::Matrix4f modelMatrix = gameObject->getComponent<Transform>()->getTransformationMatrix();
         TexturePtr colorLUT = TheRenderer::Instance()->renderer->getObjects()->getTexture("colorLUT");
-		vmml::Matrix4f viewMatrix = TheRenderer::Instance()->renderer->getObjects()->getCamera("camera")->getViewMatrix();
+		vmml::Matrix4f viewMatrix = TheRenderer::Instance()->renderer->getObjects()->getCamera(cameraName)->getViewMatrix();
+		vmml::Matrix4f projectionMatrix = TheRenderer::Instance()->renderer->getObjects()->getCamera(cameraName)->getProjectionMatrix();
+
 
 		//Light Calculations
 		dayNightPulse = 0.5*(1 + cos(theTime.time / frequency));
@@ -46,7 +49,9 @@ public:
 
 		if (shader.get())
 	{
-		shader->setUniform("ProjectionMatrix", vmml::Matrix4f::IDENTITY);
+		shader->setUniform("shadowMap", TheRenderer::Instance()->renderer->getObjects()->getDepthMap("depthMap"));
+		//shader->setUniform("ProjectionMatrix", vmml::Matrix4f::IDENTITY);
+		shader->setUniform("ProjectionMatrix", projectionMatrix);
 		shader->setUniform("ViewMatrix", viewMatrix);
 		shader->setUniform("ModelMatrix", modelMatrix);
 		shader->setUniform("ColorLUT", colorLUT);
@@ -60,9 +65,13 @@ public:
 
 		shader->setUniform("LightDirection", lightDirection);
 		shader->setUniform("DayNightPulse", dayNightPulse);
-	}
+	} 
         //TheRenderer::Instance()->renderer->getModelRenderer()->queueModelInstance("car", "car" + std::to_string(gameObject->getId()), "camera", modelMatrix, std::vector<std::string>({ "firstLight"}), false, false, false);
     	TheRenderer::Instance()->renderer->getModelRenderer()->drawModel("Car", cameraName, modelMatrix, std::vector<std::string>({ }));
+    	//ModelPtr model, const vmml::Matrix4f &modelMatrix, const vmml::Matrix4f &viewMatrix, const vmml::Matrix4f &projectionMatrix
+    	//TheRenderer::Instance()->renderer->getModelRenderer()->drawModel(model,modelMatrix,viewMatrix,projectionMatrix, std::vector<std::string>({ }),false,false);
+
+
     }
 };
 

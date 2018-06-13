@@ -20,6 +20,7 @@ attribute vec4 TexCoord;
 varying lowp vec4 diffuseVarying;
 varying lowp vec4 texCoordVarying;
 
+varying highp vec4 fragPosLightSpace;
 varying mediump vec4 posVarying;        // pos in world space
 varying mediump vec3 normalVarying;     // normal in world space
 varying mediump vec3 tangentVarying;    // tangent in world space
@@ -33,6 +34,9 @@ void main()
     normalVarying = normalize(NormalMatrix * Normal);
     tangentVarying = normalize(NormalMatrix * Tangent);
     texCoordVarying = TexCoord * TreeAnimation;
+
+        fragPosLightSpace = ViewMatrix * Position;
+
 
     DayNightPulseVarying = DayNightPulse;
     LightDirectionVarying = LightDirection;

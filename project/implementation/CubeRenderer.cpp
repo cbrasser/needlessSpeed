@@ -71,6 +71,8 @@ public:
         CubeMapPtr skybox = TheRenderer::Instance()->renderer->getObjects()->getCubeMap("skybox");
         
         if (shader.get()){
+                    shader->setUniform("shadowMap", TheRenderer::Instance()->renderer->getObjects()->getDepthMap("depthMap"));
+
             
             //.vert uniforms
             shader->setUniform("ModelMatrix", modelMatrix);

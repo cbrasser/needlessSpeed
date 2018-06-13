@@ -30,7 +30,7 @@ float ShadowCalculation(vec4 fragPosLightSpace)
     // transform to [0,1] range
     projCoords = projCoords * 0.5 + 0.5;
     // get closest depth value from light's perspective (using [0,1] range fragPosLight as coords)
-    float closestDepth = texture(shadowMap, projCoords.xy).r; 
+    float closestDepth = texture2D(shadowMap, projCoords.xy).r; 
     // get depth of current fragment from light's perspective
     float currentDepth = projCoords.z;
     // check whether current frag pos is in shadow
@@ -45,6 +45,7 @@ void main()
     highp vec3 n = normalize(normalVarying);   
 
     highp vec3 l = normalize(LightDirectionVarying);
+
     
     highp float intensity = dot(l, n);
     intensity = clamp(intensity, 0.05, 0.95); //limit with clamp, so there is not overflow when looking up the colors in the lut (avoids highlighting around the edges)
@@ -54,8 +55,15 @@ void main()
     highp float timeOfDay = clamp(DayNightPulseVarying, 0.05, 0.95); //limit with clamp, so there is not overflow when looking up the colors in the lut (avoids highlighting around the edges)
     highp float strength = 1.0; // Can be use to adjust the global amount of lightColor
     highp vec4 lightColor = texture2D(ColorLUT, vec2(intensity, timeOfDay)) * vec4(strength, strength, strength, 1.0);
-    //highp float shadow = ShadowCalculation(fs_in.FragPosLightSpace);       
-    //highp vec3 lighting = (ambient + (1.0 - shadow) * (diffuse + specular)) * color;    
+    highp float shadow = ShadowCalculation(fragPosLightSpace); 
+    if(shadow==0.0){
+        //shadow
+        lightColor = texture2D(ColorLUT, vec2(intensity, 0.90)) * vec4(strength, strength, strength, 1.0);
+        }else{
+            //not in shadow
+        lightColor = texture2D(ColorLUT, vec2(intensity, 0.05)) * vec4(strength, strength, strength, 1.0);
+        }   
+    // highp vec3 lighting = (ambient + (1.0 - shadow) * (diffuse + specular)) * color;    
 
 	//gl_FragColor = vec4(n, 1.0);
 	gl_FragColor = lightColor * modelTexture;

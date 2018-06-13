@@ -83,7 +83,7 @@ public:
 		Forest2->addComponent<ForestRenderer>();
 
 		GameObject *Tree = instanciate("Tree");
-		Tree->getComponent<Transform>()->setScale(vmml::Vector3f(1.5f, 1.5f, 1.5f));
+		Tree->getComponent<Transform>()->setScale(vmml::Vector3f(3.5f, 3.5f, 3.5f));
 		Tree->addComponent<TreeRenderer>();
 		Tree->addComponent<SphereCollider>()->setRadius(1.1f);
 		Tree->getComponent<Transform>()->setPosition(vmml::Vector3f(5.f, 0.f, 0.f));
@@ -118,7 +118,7 @@ public:
 		GameObject *Camera = instanciate("Camera");
 		Camera->addComponent<FreeCameraScript>();	
 
-		GameObject *ShadowCamera = instanciate("Camera");
+		//GameObject *ShadowCamera = instanciate("Camera");
 		//ShadowCamera->addComponent<FreeCameraScript>();
 
 

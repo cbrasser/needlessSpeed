@@ -40,7 +40,8 @@ public:
         TexturePtr colorLUT = TheRenderer::Instance()->renderer->getObjects()->getTexture("colorLUT");
 
 		//ShaderPtr shader = TheRenderer::Instance()->renderer->getObjects()->getShader("general");
-		vmml::Matrix4f viewMatrix = TheRenderer::Instance()->renderer->getObjects()->getCamera("camera")->getViewMatrix();
+		vmml::Matrix4f viewMatrix = TheRenderer::Instance()->renderer->getObjects()->getCamera(cameraName)->getViewMatrix();
+		vmml::Matrix4f projectionMatrix = TheRenderer::Instance()->renderer->getObjects()->getCamera(cameraName)->getProjectionMatrix();
 		
 		//Light Calculations
 		dayNightPulse = 0.5*(1 + cos(theTime.time / frequency));
@@ -49,13 +50,14 @@ public:
 
 		if (shader.get())
 	{
-		shader->setUniform("ProjectionMatrix", vmml::Matrix4f::IDENTITY);
+		shader->setUniform("shadowMap", TheRenderer::Instance()->renderer->getObjects()->getDepthMap("depthMap"));
+		shader->setUniform("ProjectionMatrix", projectionMatrix);
 		shader->setUniform("ViewMatrix", viewMatrix);
 		shader->setUniform("ModelMatrix", modelMatrix);
 		shader->setUniform("ColorLUT", colorLUT);
 		
 		vmml::Matrix3f normalMatrix;
-		vmml::compute_inverse(vmml::transpose(vmml::Matrix3f(modelMatrix)), normalMatrix);
+		vmml::compute_inverse(vmml::transpose(vmml::Matrix3f(modelMatrix)), normalMatrix);	
 		shader->setUniform("NormalMatrix", normalMatrix);
 
 		vmml::Vector4f eyePos = vmml::Vector4f(0.0f, 0.0f, 10.0f, 1.0f);

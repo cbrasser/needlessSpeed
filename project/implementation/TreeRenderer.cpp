@@ -42,6 +42,7 @@ public:
 
 		//ShaderPtr shader = TheRenderer::Instance()->renderer->getObjects()->getShader("tree");
 		vmml::Matrix4f viewMatrix = TheRenderer::Instance()->renderer->getObjects()->getCamera(cameraName)->getViewMatrix();
+		vmml::Matrix4f projectionMatrix = TheRenderer::Instance()->renderer->getObjects()->getCamera(cameraName)->getProjectionMatrix();
 
 		//Light Calculations
 		dayNightPulse = 0.5*(1 + cos(theTime.time / frequency));
@@ -53,7 +54,9 @@ public:
 
 		if (shader.get())
 		{
-			shader->setUniform("ProjectionMatrix", vmml::Matrix4f::IDENTITY);
+			shader->setUniform("shadowMap", TheRenderer::Instance()->renderer->getObjects()->getDepthMap("depthMap"));
+
+			shader->setUniform("ProjectionMatrix", projectionMatrix);
 			shader->setUniform("ViewMatrix", viewMatrix);
 			shader->setUniform("ModelMatrix", modelMatrix);
 			shader->setUniform("ColorLUT", colorLUT);
