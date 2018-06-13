@@ -122,6 +122,8 @@ void Core::initFunction()
 
     // Create camera
     bRenderer().getObjects()->createCamera("camera", vmml::Vector3f(0.f, -4.5f, -3.0f), vmml::Vector3f(-0.5f, 0.f, 0.f));
+    //bRenderer().getObjects()->createCamera("camera", vmml::Vector3f(0.f, -34.5f, -3.0f), vmml::Vector3f(-1.57f, 0.f, 0.f));
+
 	bRenderer().getObjects()->createCamera("shadowCamera", vmml::Vector3f(0.f, -100.5f, .0f), vmml::Vector3f(-1.57f, 0.f, 0.f));
 	//bRenderer().getObjects()->createCamera("shadowCamera", vmml::Vector3f(0.f, -4.5f, -3.0f), vmml::Vector3f(-0.5f, 0.f, 0.f));
 

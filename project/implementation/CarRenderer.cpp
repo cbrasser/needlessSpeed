@@ -33,14 +33,17 @@ public:
 			shader = TheRenderer::Instance()->renderer->getObjects()->getShader("car");
 		} else {
 			shader = customShader;
-			
+
 		}
-		ModelPtr model = TheRenderer::Instance()->renderer->getObjects()->getModel("car");
+		ModelPtr model = TheRenderer::Instance()->renderer->getObjects()->getModel("Car");
 		vmml::Matrix4f modelMatrix = gameObject->getComponent<Transform>()->getTransformationMatrix();
         TexturePtr colorLUT = TheRenderer::Instance()->renderer->getObjects()->getTexture("colorLUT");
-		vmml::Matrix4f viewMatrix = TheRenderer::Instance()->renderer->getObjects()->getCamera(cameraName)->getViewMatrix();
-		vmml::Matrix4f projectionMatrix = TheRenderer::Instance()->renderer->getObjects()->getCamera(cameraName)->getProjectionMatrix();
+		vmml::Matrix4f lightViewMatrix = TheRenderer::Instance()->renderer->getObjects()->getCamera("shadowCamera")->getViewMatrix();
+		vmml::Matrix4f lightProjectionMatrix = TheRenderer::Instance()->renderer->getObjects()->getCamera("shadowCamera")->getProjectionMatrix();
 
+		vmml::Matrix4f viewMatrix = TheRenderer::Instance()->renderer->getObjects()->getCamera("camera")->getViewMatrix();
+		vmml::Matrix4f projectionMatrix = TheRenderer::Instance()->renderer->getObjects()->getCamera("camera")->getProjectionMatrix();
+		//std::cout<<"View Matrix"<<viewMatrix<<std::endl;
 
 		//Light Calculations
 		dayNightPulse = 0.5*(1 + cos(theTime.time / frequency));
@@ -51,8 +54,12 @@ public:
 	{
 		shader->setUniform("shadowMap", TheRenderer::Instance()->renderer->getObjects()->getDepthMap("depthMap"));
 		//shader->setUniform("ProjectionMatrix", vmml::Matrix4f::IDENTITY);
+		shader->setUniform("LightProjectionMatrix", lightProjectionMatrix);
+		shader->setUniform("LightViewMatrix", lightViewMatrix);
+
 		shader->setUniform("ProjectionMatrix", projectionMatrix);
 		shader->setUniform("ViewMatrix", viewMatrix);
+
 		shader->setUniform("ModelMatrix", modelMatrix);
 		shader->setUniform("ColorLUT", colorLUT);
 		
@@ -70,6 +77,13 @@ public:
     	TheRenderer::Instance()->renderer->getModelRenderer()->drawModel("Car", cameraName, modelMatrix, std::vector<std::string>({ }));
     	//ModelPtr model, const vmml::Matrix4f &modelMatrix, const vmml::Matrix4f &viewMatrix, const vmml::Matrix4f &projectionMatrix
     	//TheRenderer::Instance()->renderer->getModelRenderer()->drawModel(model,modelMatrix,viewMatrix,projectionMatrix, std::vector<std::string>({ }),false,false);
+
+
+/*		std::cout<<"view: "<<viewMatrix<<std::endl;
+		std::cout<<"model: "<<modelMatrix<<std::endl;
+		std::cout<<"proj: "<<projectionMatrix<<std::endl;
+    	TheRenderer::Instance()->renderer->getModelRenderer()->drawModel(model, modelMatrix, viewMatrix, projectionMatrix, std::vector<std::string>({ }));*/
+
 
 
     }

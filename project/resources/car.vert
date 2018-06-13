@@ -3,6 +3,9 @@
 uniform highp mat4 ViewMatrix;
 uniform highp mat4 ModelMatrix;
 uniform highp mat4 ProjectionMatrix;
+uniform highp mat4 LightProjectionMatrix;
+uniform highp mat4 LightViewMatrix;
+
 
 uniform highp mat3 NormalMatrix;
 
@@ -30,13 +33,16 @@ varying highp vec3 LightDirectionVarying; // Value for the direction light
 
 void main()
 {
-    posVarying = ModelMatrix * Position;
+    posVarying = ModelMatrix * Position; //fragpos
     normalVarying = normalize(NormalMatrix * Normal);
     tangentVarying = normalize(NormalMatrix * Tangent);
     texCoordVarying = TexCoord;
-	fragPosLightSpace = ViewMatrix * Position;
+    mat4 lightSpaceMatrix = LightProjectionMatrix* LightViewMatrix;
+
+    fragPosLightSpace = lightSpaceMatrix * Position;
+	//fragPosLightSpace = ViewMatrix * Position;
     DayNightPulseVarying = DayNightPulse;
     LightDirectionVarying = LightDirection;
     
-    gl_Position = ProjectionMatrix * ViewMatrix * posVarying;
+    gl_Position = ProjectionMatrix * ViewMatrix * ModelMatrix * Position;
 }

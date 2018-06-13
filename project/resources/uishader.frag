@@ -1,8 +1,8 @@
 #version 130
 
-uniform sampler2D fbo_texture;
+// uniform sampler2D fbo_texture;
 
-varying vec4 texCoordVarying;
+// varying vec4 texCoordVarying;
 
 void main() 
 {

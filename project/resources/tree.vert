@@ -34,8 +34,8 @@ void main()
     normalVarying = normalize(NormalMatrix * Normal);
     tangentVarying = normalize(NormalMatrix * Tangent);
     texCoordVarying = TexCoord * TreeAnimation;
+    fragPosLightSpace = ProjectionMatrix* ViewMatrix * Position;
 
-        fragPosLightSpace = ViewMatrix * Position;
 
 
     DayNightPulseVarying = DayNightPulse;
