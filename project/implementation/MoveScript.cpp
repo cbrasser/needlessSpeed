@@ -164,11 +164,8 @@ public:
         if (Input::isTouchDevice()) {
             float newTurning = turning;
             
-            if (TheRenderer::Instance()->renderer->getInput()->getGyroscopePitch() <= -0.15) {
-                newTurning -= 1.0;
-            }
-            else if (TheRenderer::Instance()->renderer->getInput()->getGyroscopePitch() >= 0.15) {
-                newTurning += 1.0;
+            if (TheRenderer::Instance()->renderer->getInput()->getGyroscopePitch() <= -0.05 || TheRenderer::Instance()->renderer->getInput()->getGyroscopePitch() >= 0.05) {
+                newTurning += (TheRenderer::Instance()->renderer->getInput()->getGyroscopePitch()) * 2.0;
             }
             
             return newTurning;
@@ -240,8 +237,8 @@ public:
         
         velocity += acceleration;
         //Max speed
-        if(abs>35.0f){
-            velocity = vmml::normalize(velocity)*35.0f;
+        if(abs>25.0f){
+            velocity = vmml::normalize(velocity)*25.0f;
         }
         
         
@@ -264,6 +261,8 @@ public:
         else {
             wheelSpeed = abs;
         }
+
+		//std::cout << "Car Position: " << position << std::endl;
 
 		//TODO: Might need to also take in consideration if we are driving forwards/backwards
         if (turningDirection < 0.f) { //turning right

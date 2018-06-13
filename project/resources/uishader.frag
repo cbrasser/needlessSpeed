@@ -1,3 +1,10 @@
+/**
+$B_SHADER_VERSION
+#ifdef GL_ES
+precision highp float;
+#endif
+*/
+
 #version 130
 
 // uniform sampler2D fbo_texture;

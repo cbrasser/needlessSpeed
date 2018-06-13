@@ -38,7 +38,8 @@ public:
 		GameObject *Car = instanciate("Car");
 		Car->addComponent<CarRenderer>();
 		Car->addComponent<SphereCollider>()->setRadius(1.2f);
-		Car->getComponent<Transform>()->setPosition(vmml::Vector3f(0.f, 0.2f, 0.f));
+		Car->getComponent<Transform>()->setRotation(vmml::Vector3f(0.f, 71.f, 0.f));
+		Car->getComponent<Transform>()->setPosition(vmml::Vector3f(5.716f, 0.2f, -7.05f));
 		Car->addComponent<MoveScript>();
 		
 		GameObject *WheelLR = instanciate("WheelLR");
@@ -82,22 +83,56 @@ public:
 		Forest2->getComponent<Transform>()->setPosition(vmml::Vector3f(20.f, -0.5f, 8.f));
 		Forest2->addComponent<ForestRenderer>();
 
-		GameObject *Tree = instanciate("Tree");
-		Tree->getComponent<Transform>()->setScale(vmml::Vector3f(3.5f, 3.5f, 3.5f));
-		Tree->addComponent<TreeRenderer>();
-		Tree->addComponent<SphereCollider>()->setRadius(1.1f);
-		Tree->getComponent<Transform>()->setPosition(vmml::Vector3f(5.f, 0.f, 0.f));
+		//Trees
+		GameObject *Tree[25];
+		for (int i = 0; i < 25; i++) {
+			Tree[i] = instanciate("Tree" + std::to_string(i));
+			Tree[i]->getComponent<Transform>()->setScale(vmml::Vector3f(1.5f, 1.5f, 1.5f));
+			Tree[i]->addComponent<TreeRenderer>();
+			Tree[i]->addComponent<SphereCollider>()->setRadius(1.1f);
+			float x = (float(rand() % 1000) / 1000) * 91 - 46;
+			float z = (float(rand() % 1000) / 1000) * 102 - 144;
+			Tree[i]->getComponent<Transform>()->setPosition(vmml::Vector3f(x, 0.f, z));
+		}
 
-		GameObject *Tree2 = instanciate("Tree2");
-		Tree2->getComponent<Transform>()->setScale(vmml::Vector3f(1.5f, 1.5f, 1.5f));
-		Tree2->addComponent<TreeRenderer>();
-		Tree2->addComponent<SphereCollider>()->setRadius(1.1f);
-		Tree2->getComponent<Transform>()->setPosition(vmml::Vector3f(5.f, 0.f, 5.f));
+		
+		//Tirestacks
+		GameObject *Tirestack[28];
+		for (int i = 0; i < 28; i++) {
+			Tirestack[i] = instanciate("Tirestack" + std::to_string(i));
+			Tirestack[i]->addComponent<TirestackRenderer>();
+			Tirestack[i]->addComponent<SphereCollider>()->setRadius(0.4f);
+		}
 
-		GameObject *Tirestack = instanciate("Tirestack");
-		Tirestack->addComponent<TirestackRenderer>();
-		//Tirestack->addComponent<SphereCollider>()->setRadius(1.1f); TO DO
-		Tirestack->getComponent<Transform>()->setPosition(vmml::Vector3f(0.f, 0.f, 6.f));
+		Tirestack[0]->getComponent<Transform>()->setPosition(vmml::Vector3f(-2.07f, 0.2f, -199.9f));
+		Tirestack[1]->getComponent<Transform>()->setPosition(vmml::Vector3f(-2.07f, 0.2f, -201.4f));
+		Tirestack[2]->getComponent<Transform>()->setPosition(vmml::Vector3f(-2.07f, 0.2f, -202.9f));
+		Tirestack[3]->getComponent<Transform>()->setPosition(vmml::Vector3f(-2.07f, 0.2f, -204.4f));
+		Tirestack[4]->getComponent<Transform>()->setPosition(vmml::Vector3f(-2.07f, 0.2f, -205.9f));
+		Tirestack[5]->getComponent<Transform>()->setPosition(vmml::Vector3f(-24.07f, 0.2f, -192.3f));
+		Tirestack[6]->getComponent<Transform>()->setPosition(vmml::Vector3f(-24.07f, 0.2f, -190.8f));
+		Tirestack[7]->getComponent<Transform>()->setPosition(vmml::Vector3f(-24.07f, 0.2f, -189.3f));
+		Tirestack[8]->getComponent<Transform>()->setPosition(vmml::Vector3f(-24.07f, 0.2f, -187.8f));
+		Tirestack[9]->getComponent<Transform>()->setPosition(vmml::Vector3f(-24.07f, 0.2f, -186.3f));
+		Tirestack[10]->getComponent<Transform>()->setPosition(vmml::Vector3f(83.3f, 0.2f, -38.05f));
+		Tirestack[11]->getComponent<Transform>()->setPosition(vmml::Vector3f(85.3f, 0.2f, -45.72f));
+		Tirestack[12]->getComponent<Transform>()->setPosition(vmml::Vector3f(82.3f, 0.2f, -53.37f));
+		Tirestack[13]->getComponent<Transform>()->setPosition(vmml::Vector3f(72.95f, 0.2f, -64.98f));
+		Tirestack[14]->getComponent<Transform>()->setPosition(vmml::Vector3f(34.26f, 0.2f, -192.17f));
+		Tirestack[15]->getComponent<Transform>()->setPosition(vmml::Vector3f(34.26f, 0.2f, -192.17f));
+		Tirestack[16]->getComponent<Transform>()->setPosition(vmml::Vector3f(-55.62f, 0.2f, -174.15f));
+		Tirestack[17]->getComponent<Transform>()->setPosition(vmml::Vector3f(-77.03f, 0.2f, -135.66f));
+		Tirestack[18]->getComponent<Transform>()->setPosition(vmml::Vector3f(-73.69f, 0.2f, -111.54f));
+		Tirestack[19]->getComponent<Transform>()->setPosition(vmml::Vector3f(-88.82f, 0.2f, -99.45f));
+		Tirestack[20]->getComponent<Transform>()->setPosition(vmml::Vector3f(-87.1f, 0.2f, -77.6f));
+		Tirestack[21]->getComponent<Transform>()->setPosition(vmml::Vector3f(-90.79f, 0.2f, -71.42f));
+		Tirestack[22]->getComponent<Transform>()->setPosition(vmml::Vector3f(-91.74f, 0.2f, -59.47f));
+		Tirestack[23]->getComponent<Transform>()->setPosition(vmml::Vector3f(-89.85f, 0.2f, -48.65f));
+		Tirestack[24]->getComponent<Transform>()->setPosition(vmml::Vector3f(-87.66f, 0.2f, -41.64f));
+		Tirestack[25]->getComponent<Transform>()->setPosition(vmml::Vector3f(-80.83f, 0.2f, -32.29f));
+		Tirestack[26]->getComponent<Transform>()->setPosition(vmml::Vector3f(-72.26f, 0.2f, -25.50f));
+		Tirestack[27]->getComponent<Transform>()->setPosition(vmml::Vector3f(-60.50f, 0.2f, -20.07f));
+
 
 
 		//Timing Markers
@@ -117,9 +152,6 @@ public:
 		//Camera
 		GameObject *Camera = instanciate("Camera");
 		Camera->addComponent<FreeCameraScript>();	
-
-		//GameObject *ShadowCamera = instanciate("Camera");
-		//ShadowCamera->addComponent<FreeCameraScript>();
 
 
 		//UI

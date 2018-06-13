@@ -7,6 +7,7 @@
 #include "Core.h"
 #include "TreeRenderer.cpp"
 #include "CarRenderer.cpp"
+#include "TirestackRenderer.cpp"
 #include "ParticleSystemRenderer.cpp"
 #include "ParticleSystem.h"
 #include "GameObject.h"
@@ -37,12 +38,25 @@ public:
         if((pos1 - pos2).squared_length() <= minDistance * minDistance){
 
             if (other->gameObject->getComponent<TreeRenderer>() != nullptr && gameObject->getComponent<CarRenderer>() != nullptr) {
-                
+                //Tree
 				std::cout << "Collision Detected - Car and Tree" << std::endl;
 				gameObject->getComponent<MoveScript>()->isCollision = true;
 
+				//Destroy the car
+				gameObject->destroy();
+
+			} 
+			else if (other->gameObject->getComponent<TirestackRenderer>() != nullptr && gameObject->getComponent<CarRenderer>() != nullptr) {
+				//Tirestack
+				std::cout << "Collision Detected - Car and Tirestack" << std::endl;
+				gameObject->getComponent<MoveScript>()->isCollision = true;
+				
+				//Bumps the car back when it hits the tirestacks
+				gameObject->getComponent<MoveScript>()->velocity = (vmml::Vector3f(-350.0, -350.0, -350.0) * (vmml::normalize(gameObject->getComponent<MoveScript>()->velocity) / gameObject->getComponent<MoveScript>()->velocity.length()));
+
 			}
 			else if (other->gameObject->getComponent<StartLineRenderer>() != nullptr && gameObject->getComponent<CarRenderer>() != nullptr) {
+				//Start Line
 				std::cout << "Start Line Triggered" << std::endl;
 
 				lapEndTime = theTime.time;
