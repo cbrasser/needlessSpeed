@@ -84,18 +84,50 @@ public:
 		Forest2->addComponent<ForestRenderer>();
 
 		//Trees
-		GameObject *Tree[25];
-		for (int i = 0; i < 25; i++) {
+		GameObject *Tree[54];
+		// Instanciate trees
+		for (int i = 0; i < 54; i++) {
 			Tree[i] = instanciate("Tree" + std::to_string(i));
 			Tree[i]->getComponent<Transform>()->setScale(vmml::Vector3f(3.5f, 3.5f, 3.5f));
 			Tree[i]->addComponent<TreeRenderer>();
-			//Tree[i]->addComponent<SphereCollider>()->setRadius(1.1f);
+			Tree[i]->addComponent<SphereCollider>()->setRadius(1.1f);
+		}
+		
+		// Trees inside the track
+		for (int j = 0; j < 30; j++) {
 			float x = (float(rand() % 1000) / 1000) * 91 - 46;
 			float z = (float(rand() % 1000) / 1000) * 102 - 144;
-			Tree[i]->getComponent<Transform>()->setPosition(vmml::Vector3f(x, 0.f, z));
+			Tree[j]->getComponent<Transform>()->setPosition(vmml::Vector3f(x, 0.f, z));
 		}
 
-		
+		Tree[30]->getComponent<Transform>()->setPosition(vmml::Vector3f(58.33f, 0.f, -39.485f));
+		Tree[31]->getComponent<Transform>()->setPosition(vmml::Vector3f(68.04f, 0.f, -40.78f));
+		Tree[32]->getComponent<Transform>()->setPosition(vmml::Vector3f(76.136f, 0.f, -46.865f));
+		Tree[33]->getComponent<Transform>()->setPosition(vmml::Vector3f(28.13f, 0.f, -161.12f));
+		Tree[34]->getComponent<Transform>()->setPosition(vmml::Vector3f(13.48f, 0.f, -170.74f));
+		Tree[35]->getComponent<Transform>()->setPosition(vmml::Vector3f(-16.06f, 0.f, -169.94f));
+		Tree[36]->getComponent<Transform>()->setPosition(vmml::Vector3f(-31.19f, 0.f, -167.2f));
+		Tree[37]->getComponent<Transform>()->setPosition(vmml::Vector3f(-47.4f, 0.f, -59.7f));
+		Tree[38]->getComponent<Transform>()->setPosition(vmml::Vector3f(-74.63f, 0.f, -70.0f));
+		Tree[39]->getComponent<Transform>()->setPosition(vmml::Vector3f(-79.5f, 0.f, -48.4f));
+		Tree[40]->getComponent<Transform>()->setPosition(vmml::Vector3f(-75.28f, 0.f, -38.27f));
+		Tree[41]->getComponent<Transform>()->setPosition(vmml::Vector3f(-55.13f, 0.f, -32.08f));
+		Tree[42]->getComponent<Transform>()->setPosition(vmml::Vector3f(-18.83f, 0.f, -28.8f));
+		Tree[43]->getComponent<Transform>()->setPosition(vmml::Vector3f(20.67f, 0.f, -32.9f));
+
+		// Trees outside the track
+		Tree[44]->getComponent<Transform>()->setPosition(vmml::Vector3f(-45.16f, 0.f, 18.7f));
+		Tree[45]->getComponent<Transform>()->setPosition(vmml::Vector3f(-83.87f, 0.f, 21.83f));
+		Tree[46]->getComponent<Transform>()->setPosition(vmml::Vector3f(-118.25f, 0.f, -25.7f));
+		Tree[47]->getComponent<Transform>()->setPosition(vmml::Vector3f(-133.65f, 0.f, -93.78f));
+		Tree[48]->getComponent<Transform>()->setPosition(vmml::Vector3f(-92.45f, 0.f, -175.18f));
+		Tree[49]->getComponent<Transform>()->setPosition(vmml::Vector3f(-56.48f, 0.f, -218.9f));
+		Tree[50]->getComponent<Transform>()->setPosition(vmml::Vector3f(71.69f, 0.f, -170.29f));
+		Tree[51]->getComponent<Transform>()->setPosition(vmml::Vector3f(81.37f, 0.f, -103.16f));
+		Tree[52]->getComponent<Transform>()->setPosition(vmml::Vector3f(87.0f, 0.f, -7.93f));
+		Tree[53]->getComponent<Transform>()->setPosition(vmml::Vector3f(58.38f, 0.f, 4.9f));
+
+
 		//Tirestacks
 		GameObject *Tirestack[28];
 		for (int i = 0; i < 28; i++) {
@@ -139,7 +171,7 @@ public:
 		GameObject *StartLine = instanciate("StartLine");
 		StartLine->addComponent<StartLineRenderer>();
 		StartLine->addComponent<SphereCollider>()->setRadius(1.f);
-		StartLine->getComponent<Transform>()->setPosition(vmml::Vector3f(10.f, 0.f, 0.f));
+		StartLine->getComponent<Transform>()->setPosition(vmml::Vector3f(25.42f, 0.f, -21.625f));
 
 
 		//Particles
