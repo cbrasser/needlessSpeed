@@ -5,9 +5,10 @@
 #include "Logic.h"
 #include "Physics.h"
 
-#include "TestScene.cpp"
 #include "StartScene.cpp"
+#include "TestScene.cpp"
 #include "CrashScene.cpp"
+
 
 //Needed to have Visual Studio recompile core.cpp in all incremental builds. Does not do anything, but can be changed to code is updated and recompile triggered
 //bool justAnotherBoolInTheWall = false;
@@ -110,8 +111,8 @@ void Core::initFunction()
 
 
 
-	//ShaderPtr uiShader = bRenderer().getObjects()->loadShaderFile("uishader", 0, false, false, false, false, false);
-	//MaterialPtr blurMaterial = bRenderer().getObjects()->createMaterial("blurMaterial", uiShader);								// create an empty material to assign either texture1 or texture2 to
+	ShaderPtr uiShader = bRenderer().getObjects()->loadShaderFile("uishader", 0, false, false, false, false, false);
+	MaterialPtr blurMaterial = bRenderer().getObjects()->createMaterial("blurMaterial", uiShader);								// create an empty material to assign either texture1 or texture2 to
 
 	//std::cout<< "-----------------------------------------------\n";	
 
@@ -125,9 +126,9 @@ void Core::initFunction()
 
 
 	bRenderer().getObjects()->createFramebuffer("fbo");	
-	dpr = bRenderer().getObjects()->createDepthMap("depthMap", 1024, 1024);	// create texture to bind to the fbo
+	dpr = bRenderer().getObjects()->createDepthMap("depthMap", 1024, 1024);	// create texture to bind to the fbo	
 
-	//bRenderer().getObjects()->createSprite("sprite",blurMaterial);															// create a sprite using the material created above
+	bRenderer().getObjects()->createSprite("sprite",blurMaterial);															// create a sprite using the material created above
 
 	bRenderer().getObjects()->loadTexture("colorLUT.png");
     //bRenderer().getObjects()->createCamera("camera", vmml::Vector3f(0.0f, 0.0f, 10.0f), vmml::Vector3f(0.f, 0.0f, 0.f));
@@ -216,18 +217,10 @@ void Core::loopFunction(const double &deltaTime, const double &elapsedTime)
 
 	}
 
-
 	Logic::update();
 	Logic::lateUpdate();
-	renderer.renderShadows();
+	//renderer.renderShadows();
 	renderer.render();
-	//vmml::Matrix4f modelMatrix = vmml::create_translation(vmml::Vector3f(0.0f, 0.0f, -0.5));
-	//bRenderer().getObjects()->getFramebuffer("fbo")->bindDepthMap(bRenderer().getObjects()->getTexture("depthMap"));
-	//bRenderer().getObjects()->getMaterial("blurMaterial")->setTexture("fbo_texture", dpr);
-
-	//bRenderer().getModelRenderer()->drawModel(bRenderer().getObjects()->getModel("sprite"), modelMatrix, _viewMatrixHUD, vmml::Matrix4f::IDENTITY, std::vector<std::string>({}), false);
-	//std::cout<<"--------------------------------------------------3\n"<<std::endl;
-
 
 
 }

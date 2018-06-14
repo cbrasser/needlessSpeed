@@ -4,29 +4,142 @@ SYSTEM: Using GLEW 1.13.0
 INFO: OpenGL Version: 3.0 Mesa 17.2.8
 INFO: Shading Language Version: 1.30
 -----------------------------------------------
+SYSTEM: Trying to load shader file uishader.vert
+SYSTEM: Trying to load shader file uishader.frag
+INFO: Loaded shader code: 
+
+INFO: /**
+#version 120
+#ifdef GL_ES
+precision highp float;
+#endif
+*/
+
+#version 130
+
+uniform mat4 ModelViewMatrix;
+uniform mat4 ProjectionMatrix;
+
+attribute vec4 Position;
+attribute vec4 TexCoord;
+
+varying vec4 texCoordVarying;
+
+void main()
+{
+    texCoordVarying = TexCoord; 
+    gl_Position = ProjectionMatrix * ModelViewMatrix * Position;  
+}
+
+INFO: /**
+#version 120
+#ifdef GL_ES
+precision highp float;
+#endif
+*/
+
+#version 130
+
+ uniform sampler2D fbo_texture;
+
+ varying vec4 texCoordVarying;
+
+void main() 
+{
+    //gl_FragColor = texture2D(fbo_texture, texCoordVarying.xy);
+    gl_FragColor = vec4(1.0,0.0,0.0,1.0);
+}
+
+INFO: Created shader 'uishader'.
+INFO: Number of available tex units: 32.
+SYSTEM: Trying to load shader file menu.vert
+SYSTEM: Trying to load shader file menu.frag
+INFO: Loaded shader code: 
+
+INFO: /**
+#version 120
+#ifdef GL_ES
+precision highp float;
+#endif
+*/
+
+#version 130
+
+varying vec3 normalVaryingViewSpace;
+varying vec3 surfaceToCameraViewSpace;
+uniform mat4 ModelViewMatrix;
+uniform mat4 ProjectionMatrix;
+attribute vec4 Position;
+attribute vec3 Normal;
+attribute vec3 Tangent;
+attribute vec3 Bitangent;
+attribute vec4 TexCoord;
+
+
+varying vec4 texCoordVarying;
+
+
+void main()
+{
+
+    texCoordVarying = Position - vec4(-0.5,0,-0.5,1);
+    
+    gl_Position = ProjectionMatrix * ModelViewMatrix * Position;
+}
+
+INFO: /**
+#version 120
+#ifdef GL_ES
+precision highp float;
+#endif
+*/
+
+#version 130
+
+
+varying vec3 normalVaryingViewSpace;
+varying vec3 surfaceToCameraViewSpace;
+uniform sampler2D NormalMap;
+uniform sampler2D SpecularMap;
+uniform vec3 ambientColor;
+uniform vec3 Ka;
+uniform vec3 Kd;
+uniform vec3 Ks;
+uniform float Ns;
+
+varying lowp vec4 texCoordVarying;
+uniform sampler2D DiffuseMapNew;
+
+
+void main()
+{
+	lowp vec4 modelTexture = texture2D(DiffuseMapNew, texCoordVarying.xz);
+	
+	gl_FragColor = modelTexture;
+    //gl_FragColor = texture2D(DiffuseMapNew, texCoordVarying.xz);
+}
+
+INFO: Created shader 'menu'.
+INFO: Number of available tex units: 32.
+SYSTEM: loading Model: quadMenu.obj
+INFO: mtllib quad.mtl
+INFO: o Plane
+INFO: usemtl quadMenu
+SYSTEM: Renderer started
 =========================
 SYSTEM: Trying to load shader file sprite.vert
 SYSTEM: Trying to load shader file sprite.frag
 INFO: Loaded shader code: 
 
-INFO: #version 130
+INFO: /**
+#version 120
+#ifdef GL_ES
+precision highp float;
+#endif
+*/
 
-uniform vec4 lightPositionViewSpace_0;
-uniform float lightIntensity_0;
-uniform float lightAttenuation_0;
-uniform float lightRadius_0;
-uniform vec3 lightDiffuseColor_0;
-uniform vec3 lightSpecularColor_0;
-varying vec3 lightVectorViewSpace_0;
-varying float intensityBasedOnDist_0;
-uniform vec4 lightPositionViewSpace_1;
-uniform float lightIntensity_1;
-uniform float lightAttenuation_1;
-uniform float lightRadius_1;
-uniform vec3 lightDiffuseColor_1;
-uniform vec3 lightSpecularColor_1;
-varying vec3 lightVectorViewSpace_1;
-varying float intensityBasedOnDist_1;
+#version 130
+
 varying vec3 normalVaryingViewSpace;
 varying vec3 surfaceToCameraViewSpace;
 uniform mat4 ModelViewMatrix;
@@ -52,25 +165,16 @@ void main()
     gl_Position = ProjectionMatrix * ModelViewMatrix * Position;
 }
 
-INFO: #version 130
+INFO: /**
+#version 120
+#ifdef GL_ES
+precision highp float;
+#endif
+*/
 
-//Was trying to fix the warning
-uniform vec4 lightPositionViewSpace_0;
-uniform float lightIntensity_0;
-uniform float lightAttenuation_0;
-uniform float lightRadius_0;
-uniform vec3 lightDiffuseColor_0;
-uniform vec3 lightSpecularColor_0;
-varying vec3 lightVectorViewSpace_0;
-varying float intensityBasedOnDist_0;
-uniform vec4 lightPositionViewSpace_1;
-uniform float lightIntensity_1;
-uniform float lightAttenuation_1;
-uniform float lightRadius_1;
-uniform vec3 lightDiffuseColor_1;
-uniform vec3 lightSpecularColor_1;
-varying vec3 lightVectorViewSpace_1;
-varying float intensityBasedOnDist_1;
+#version 130
+
+
 varying vec3 normalVaryingViewSpace;
 varying vec3 surfaceToCameraViewSpace;
 uniform sampler2D NormalMap;
@@ -108,19 +212,16 @@ SYSTEM: Trying to load shader file car.vert
 SYSTEM: Trying to load shader file car.frag
 INFO: Loaded shader code: 
 
-INFO: #version 130
+INFO: 
+#version 130
 
 uniform highp mat4 ViewMatrix;
 uniform highp mat4 ModelMatrix;
 uniform highp mat4 ProjectionMatrix;
-uniform highp mat4 LightProjectionMatrix;
-uniform highp mat4 LightViewMatrix;
-
+uniform highp float shadow;
+uniform mat4 lightSpaceMatrix;
 
 uniform highp mat3 NormalMatrix;
-
-uniform highp vec4 LightPos;
-uniform highp vec4 EyePos;
 
 uniform highp float DayNightPulse;
 uniform highp vec3 LightDirection;
@@ -140,32 +241,37 @@ varying highp vec3 tangentVarying;    // tangent in world space
 
 varying highp float DayNightPulseVarying; // Value for the day and night cycle
 varying highp vec3 LightDirectionVarying; // Value for the direction light
+varying highp float shadowVarying;
 
 void main()
 {
-    posVarying = ModelMatrix * Position; //fragpos
-    normalVarying = normalize(NormalMatrix * Normal);
-    tangentVarying = normalize(NormalMatrix * Tangent);
-    texCoordVarying = TexCoord;
-    mat4 lightSpaceMatrix = LightProjectionMatrix* LightViewMatrix;
+	shadowVarying = shadow;
+	//shadows
+	if(shadow>0.1){
+		gl_Position =  lightSpaceMatrix* ModelMatrix * Position; 
+	//normal rendering
+	}else{
+		posVarying = ModelMatrix * Position; //fragpos
+    	normalVarying = normalize(NormalMatrix * Normal);
+    	tangentVarying = normalize(NormalMatrix * Tangent);
+    	texCoordVarying = TexCoord;
 
-    fragPosLightSpace = lightSpaceMatrix * Position;
-	//fragPosLightSpace = ViewMatrix * Position;
-    DayNightPulseVarying = DayNightPulse;
-    LightDirectionVarying = LightDirection;
+    	fragPosLightSpace = lightSpaceMatrix * Position;
+    	DayNightPulseVarying = DayNightPulse;
+    	LightDirectionVarying = LightDirection;
+    	gl_Position = ProjectionMatrix * ViewMatrix * posVarying;
+	}
     
-    gl_Position = ProjectionMatrix * ViewMatrix * ModelMatrix * Position;
 }
 
-INFO: #version 130
+INFO: 
+#version 130
 
 uniform highp mat4 ViewMatrix;
 uniform highp mat4 ModelMatrix;
 uniform highp mat4 ProjectionMatrix;
 
 uniform highp mat3 NormalMatrix;
-
-uniform highp vec4 LightPos;
 
 varying highp float DayNightPulseVarying; // Value for the Day and Night Cycle
 varying highp vec3 LightDirectionVarying; // Value for light direction
@@ -181,6 +287,7 @@ varying highp vec4 posVarying;        // pos in world space
 varying highp vec3 normalVarying;     // normal in world space
 varying highp vec3 tangentVarying;    // tangent in world space
 varying highp vec4 fragPosLightSpace;
+varying highp float shadowVarying;
 
 float ShadowCalculation(vec4 fragPosLightSpace)
 {
@@ -200,7 +307,8 @@ float ShadowCalculation(vec4 fragPosLightSpace)
 
 void main()
 { 
-    highp vec4 pos = posVarying;
+    if(shadowVarying<=0.1){
+        highp vec4 pos = posVarying;
     highp vec3 n = normalize(normalVarying);   
 
     highp vec3 l = normalize(LightDirectionVarying);
@@ -224,9 +332,14 @@ void main()
         }   
     // highp vec3 lighting = (ambient + (1.0 - shadow) * (diffuse + specular)) * color;    
 
-	//gl_FragColor = vec4(n, 1.0);
-	gl_FragColor = lightColor * modelTexture;
-	//gl_FragColor = modelTexture;
+    //gl_FragColor = vec4(n, 1.0);
+    gl_FragColor = lightColor * modelTexture;
+    //gl_FragColor = modelTexture;
+    } else {
+        //gl_FragColor = vec4(fragPosLightSpace.z,0.0,0.0,1.0);
+        //gl_FragDepth = gl_FragCoord.z;
+    }
+    
 }
 
 
@@ -244,11 +357,21 @@ SYSTEM: Trying to load shader file general.vert
 SYSTEM: Trying to load shader file general.frag
 INFO: Loaded shader code: 
 
-INFO: #version 130
+INFO: /**
+#version 120
+#ifdef GL_ES
+precision highp float;
+#endif
+*/
+
+#version 130
 
 uniform mediump mat4 ViewMatrix;
 uniform mediump mat4 ModelMatrix;
 uniform mediump mat4 ProjectionMatrix;
+uniform highp mat4 lightSpaceMatrix;
+uniform highp float shadow;
+
 
 uniform mediump mat3 NormalMatrix;
 
@@ -273,21 +396,37 @@ varying mediump vec3 tangentVarying;    // tangent in world space
 
 varying mediump float DayNightPulseVarying; // Value for the day and night cycle
 varying mediump vec3 LightDirectionVarying; // Value for the direction light
+varying highp float shadowVarying;
+
 
 void main()
 {
-    posVarying = ModelMatrix * Position;
-    normalVarying = normalize(NormalMatrix * Normal);
-    tangentVarying = normalize(NormalMatrix * Tangent);
-    texCoordVarying = TexCoord;
-    fragPosLightSpace = ProjectionMatrix* ViewMatrix * Position;
-    DayNightPulseVarying = DayNightPulse;
-    LightDirectionVarying = LightDirection;
+	shadowVarying = shadow;
+	if(shadow>0.1){
+		gl_Position =  lightSpaceMatrix* ModelMatrix * Position; 
+	}else {
+		posVarying = ModelMatrix * Position;
+    	normalVarying = normalize(NormalMatrix * Normal);
+    	tangentVarying = normalize(NormalMatrix * Tangent);
+    	texCoordVarying = TexCoord;
+    	fragPosLightSpace = lightSpaceMatrix * Position;
+    	DayNightPulseVarying = DayNightPulse;
+    	LightDirectionVarying = LightDirection;
     
-    gl_Position = ProjectionMatrix * ViewMatrix * posVarying;
+    	gl_Position = ProjectionMatrix * ViewMatrix * posVarying;
+		}
+
+    
 }
 
-INFO: #version 130
+INFO: /**
+#version 120
+#ifdef GL_ES
+precision highp float;
+#endif
+*/
+
+#version 130
 
 uniform mediump mat4 ViewMatrix;
 uniform mediump mat4 ModelMatrix;
@@ -310,6 +449,8 @@ varying mediump vec4 posVarying;        // pos in world space
 varying mediump vec3 normalVarying;     // normal in world space
 varying mediump vec3 tangentVarying;    // tangent in world space
 varying highp vec4 fragPosLightSpace;
+varying highp float shadowVarying;
+
 
 
 float ShadowCalculation(vec4 fragPosLightSpace)
@@ -330,7 +471,9 @@ float ShadowCalculation(vec4 fragPosLightSpace)
 
 void main()
 { 
-    mediump vec4 pos = posVarying;
+
+    if(shadowVarying<=0.1){
+        mediump vec4 pos = posVarying;
     mediump vec3 n = normalize(normalVarying);    
 
     //TBN Matrix
@@ -368,9 +511,14 @@ void main()
         lightColor = texture2D(ColorLUT, vec2(intensity, 0.05)) * vec4(strength, strength, strength, 1.0);
         }  
         
-	//gl_FragColor = vec4(n, 1.0);
-	gl_FragColor = lightColor * modelTexture;
-	//gl_FragColor = modelTexture;
+    //gl_FragColor = vec4(n, 1.0);
+    gl_FragColor = lightColor * modelTexture;
+    //gl_FragColor = modelTexture;
+    }else {
+        //gl_FragColor = vec4(0.0,gl_FragCoord.z/2,0.0,1.0);
+        //gl_FragDepth = gl_FragCoord.z;
+    }
+    
 }
 
 INFO: Created shader 'general'.
@@ -387,11 +535,22 @@ SYSTEM: Trying to load shader file tree.vert
 SYSTEM: Trying to load shader file tree.frag
 INFO: Loaded shader code: 
 
-INFO: #version 130
+INFO: /**
+#version 120
+#ifdef GL_ES
+precision highp float;
+#endif
+*/
+
+#version 130
 
 uniform mediump mat4 ViewMatrix;
 uniform mediump mat4 ModelMatrix;
 uniform mediump mat4 ProjectionMatrix;
+uniform highp mat4 lightSpaceMatrix;
+uniform highp float shadow;
+
+
 
 uniform mediump mat3 NormalMatrix;
 
@@ -416,25 +575,37 @@ varying mediump vec3 tangentVarying;    // tangent in world space
 
 varying mediump float DayNightPulseVarying; // Value for the day and night cycle
 varying mediump vec3 LightDirectionVarying; // Value for the direction light
+varying highp float shadowVarying;
+
 
 void main()
 {
-    posVarying = ModelMatrix * Position;
-    normalVarying = normalize(NormalMatrix * Normal);
-    tangentVarying = normalize(NormalMatrix * Tangent);
-    texCoordVarying = TexCoord * TreeAnimation;
-    fragPosLightSpace = ProjectionMatrix* ViewMatrix * Position;
+	shadowVarying = shadow;
+	if(shadow>0.1){
+		gl_Position =  lightSpaceMatrix* ModelMatrix * Position; 
+	}else {
+    	posVarying = ModelMatrix * Position;
+    	normalVarying = normalize(NormalMatrix * Normal);
+    	tangentVarying = normalize(NormalMatrix * Tangent);
+    	texCoordVarying = TexCoord * TreeAnimation;
+    	fragPosLightSpace = lightSpaceMatrix * Position;
 
-
-
-    DayNightPulseVarying = DayNightPulse;
-    LightDirectionVarying = LightDirection;
+    	DayNightPulseVarying = DayNightPulse;
+    	LightDirectionVarying = LightDirection;
     
     
     gl_Position = ProjectionMatrix * ViewMatrix * posVarying;
+	}
 }
 
-INFO: #version 130
+INFO: /**
+#version 120
+#ifdef GL_ES
+precision highp float;
+#endif
+*/
+
+#version 130
 
 uniform mediump mat4 ViewMatrix;
 uniform mediump mat4 ModelMatrix;
@@ -456,6 +627,7 @@ varying mediump vec4 posVarying;        // pos in world space
 varying mediump vec3 normalVarying;     // normal in world space
 varying mediump vec3 tangentVarying;    // tangent in world space
 varying highp vec4 fragPosLightSpace;
+varying highp float shadowVarying;
 
 
 float ShadowCalculation(vec4 fragPosLightSpace)
@@ -476,7 +648,8 @@ float ShadowCalculation(vec4 fragPosLightSpace)
 
 void main()
 { 
-    mediump vec4 pos = posVarying;
+    if(shadowVarying<=0.1){
+        mediump vec4 pos = posVarying;
     mediump vec3 n = normalize(normalVarying);    
 
     //TBN Matrix
@@ -516,10 +689,14 @@ void main()
         }
 
 
-	//gl_FragColor = vec4(n, 1.0);
-	gl_FragColor = lightColor * modelTexture;
-	//gl_FragColor = modelTexture;
-	//gl_FragColor = lightColor;
+    //gl_FragColor = vec4(n, 1.0);
+    gl_FragColor = lightColor * modelTexture;
+    //gl_FragColor = modelTexture;
+    //gl_FragColor = lightColor;
+    }else {
+        //gl_FragColor = vec4(0.0,gl_FragCoord.z/3,0.0,1.0);
+    }
+    
 }
 
 INFO: Created shader 'tree'.
@@ -536,7 +713,14 @@ SYSTEM: Trying to load shader file marker.vert
 SYSTEM: Trying to load shader file marker.frag
 INFO: Loaded shader code: 
 
-INFO: #version 130
+INFO: /**
+#version 120
+#ifdef GL_ES
+precision highp float;
+#endif
+*/
+
+#version 130
 
 uniform mediump mat4 ViewMatrix;
 uniform mediump mat4 ModelMatrix;
@@ -564,7 +748,14 @@ void main()
     gl_Position = ProjectionMatrix * ViewMatrix * posVarying;
 }
 
-INFO: #version 130
+INFO: /**
+#version 120
+#ifdef GL_ES
+precision highp float;
+#endif
+*/
+
+#version 130
 
 uniform mediump mat4 ViewMatrix;
 uniform mediump mat4 ModelMatrix;
@@ -633,288 +824,25 @@ gl_FragColor.a *= texture2D(CharacterMap, texCoordVarying).r;
 }
 INFO: Created shader 'Lap Timer'.
 INFO: Number of available tex units: 32.
-SYSTEM: Renderer started
-SYSTEM: Trying to load shader file uishader.vert
-SYSTEM: Trying to load shader file uishader.frag
-INFO: Loaded shader code: 
-
-INFO: #version 130
-
-uniform mat4 LightViewMatrix;
-uniform mat4 ModelMatrix;
-uniform mat4 LightProjectionMatrix;
-
-attribute vec4 Position;
-attribute vec4 TexCoord;
-
-varying vec4 texCoordVarying;
-
-
-void main()
-{
-    texCoordVarying = TexCoord;
-    mat4 lightSpaceMatrix  = LightProjectionMatrix * LightViewMatrix;
-    //highp mat4 ModelViewMatrix = ViewMatrix * ModelMatrix;
-    //gl_Position = ProjectionMatrix * ModelViewMatrix * Position;
-    gl_Position =  lightSpaceMatrix* model * Position;
-     
-}
-
-INFO: #version 130
-
-// uniform sampler2D fbo_texture;
-
-// varying vec4 texCoordVarying;
-
-void main() 
-{
-    //float depthValue = texture(fbo_texture,texCoordVarying.xy).r;
-    //gl_FragColor = vec4(vec3(depthValue), 1.0);
-    //gl_FragColor = texture2D(fbo_texture, texCoordVarying.xy);
-
-}
-    
-
-INFO: Created shader 'uishader'.
-INFO: Shader compile log:
-0:19(34): error: `model' undeclared
-0:19(16): error: operands to arithmetic operators must be numeric
-0:19(16): error: operands to arithmetic operators must be numeric
- 
-INFO: Failed to compile vertex shader
-INFO: Number of available tex units: 32.
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Start Line Triggered
-Lap Time: 999999
-Best Lap Time: 12.4111
-Start Line Triggered
-Start Line Triggered
-Start Line Triggered
-Start Line Triggered
-Start Line Triggered
-Start Line Triggered
-Start Line Triggered
-Start Line Triggered
-Start Line Triggered
-Start Line Triggered
-Start Line Triggered
-Start Line Triggered
-Start Line Triggered
-Start Line Triggered
-Start Line Triggered
-Start Line Triggered
-Start Line Triggered
-Start Line Triggered
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
-Collision Detected - Car and Tree
+=========================
+=========================
+=========================
+=========================
+=========================
+=========================
+=========================
+=========================
+=========================
+=========================
+=========================
+=========================
+=========================
+=========================
+=========================
+=========================
+=========================
+=========================
+=========================
+=========================
+=========================
+=========================

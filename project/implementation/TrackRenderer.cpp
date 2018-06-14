@@ -18,6 +18,8 @@ public:
 	GLfloat directionFloat = 0.0f;
 	TheTime theTime;
 
+
+
 	void init() override {
 		if (TheRenderer::Instance()->renderer->getObjects()->getModel("TrackFinal") == nullptr) {
           
@@ -28,20 +30,25 @@ public:
 
 	void render(std::string cameraName, ShaderPtr customShader) override {
 
-		ShaderPtr shader;
+		ShaderPtr shader = TheRenderer::Instance()->renderer->getObjects()->getShader("general");
 		if(customShader == nullptr){
-			shader = TheRenderer::Instance()->renderer->getObjects()->getShader("general");
+			shader->setUniform("shadow",0.0);
 		} else {
-			shader = customShader;
+			shader->setUniform("shadow",1.0);
 		}
 
-		vmml::Matrix4f modelMatrix = gameObject->getComponent<Transform>()->getTransformationMatrix();
-        //vmml::Matrix4f modelMatrix = vmml::create_scaling(vmml::Vector3f(1,1,1));
-        TexturePtr colorLUT = TheRenderer::Instance()->renderer->getObjects()->getTexture("colorLUT");
+		//shadow stuff
+		vmml::Matrix4f lightViewMatrix = TheRenderer::Instance()->renderer->getObjects()->getCamera("shadowCamera")->getViewMatrix();
+		vmml::Matrix4f lightProjectionMatrix = TheRenderer::Instance()->renderer->getObjects()->getCamera("shadowCamera")->getProjectionMatrix();
+		vmml::Matrix4f lightSpaceMatrix = lightProjectionMatrix * lightViewMatrix;
 
-		//ShaderPtr shader = TheRenderer::Instance()->renderer->getObjects()->getShader("general");
+
+		vmml::Matrix4f modelMatrix = gameObject->getComponent<Transform>()->getTransformationMatrix();
+        TexturePtr colorLUT = TheRenderer::Instance()->renderer->getObjects()->getTexture("colorLUT");
 		vmml::Matrix4f viewMatrix = TheRenderer::Instance()->renderer->getObjects()->getCamera(cameraName)->getViewMatrix();
 		vmml::Matrix4f projectionMatrix = TheRenderer::Instance()->renderer->getObjects()->getCamera(cameraName)->getProjectionMatrix();
+
+		
 		
 		//Light Calculations
 		dayNightPulse = 0.5*(1 + cos(theTime.time / frequency));
@@ -51,6 +58,7 @@ public:
 		if (shader.get())
 	{
 		shader->setUniform("shadowMap", TheRenderer::Instance()->renderer->getObjects()->getDepthMap("depthMap"));
+		shader->setUniform("lightSpaceMatrix", lightSpaceMatrix);
 		shader->setUniform("ProjectionMatrix", projectionMatrix);
 		shader->setUniform("ViewMatrix", viewMatrix);
 		shader->setUniform("ModelMatrix", modelMatrix);
@@ -59,9 +67,6 @@ public:
 		vmml::Matrix3f normalMatrix;
 		vmml::compute_inverse(vmml::transpose(vmml::Matrix3f(modelMatrix)), normalMatrix);	
 		shader->setUniform("NormalMatrix", normalMatrix);
-
-		vmml::Vector4f eyePos = vmml::Vector4f(0.0f, 0.0f, 10.0f, 1.0f);
-		shader->setUniform("EyePos", eyePos);
 
 		shader->setUniform("LightDirection", lightDirection);
 		shader->setUniform("DayNightPulse", dayNightPulse);

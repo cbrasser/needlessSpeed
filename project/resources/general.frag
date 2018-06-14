@@ -28,6 +28,8 @@ varying mediump vec4 posVarying;        // pos in world space
 varying mediump vec3 normalVarying;     // normal in world space
 varying mediump vec3 tangentVarying;    // tangent in world space
 varying highp vec4 fragPosLightSpace;
+varying highp float shadowVarying;
+
 
 
 float ShadowCalculation(vec4 fragPosLightSpace)
@@ -48,7 +50,9 @@ float ShadowCalculation(vec4 fragPosLightSpace)
 
 void main()
 { 
-    mediump vec4 pos = posVarying;
+
+    if(shadowVarying<=0.1){
+        mediump vec4 pos = posVarying;
     mediump vec3 n = normalize(normalVarying);    
 
     //TBN Matrix
@@ -86,7 +90,12 @@ void main()
         lightColor = texture2D(ColorLUT, vec2(intensity, 0.05)) * vec4(strength, strength, strength, 1.0);
         }  
         
-	//gl_FragColor = vec4(n, 1.0);
-	gl_FragColor = lightColor * modelTexture;
-	//gl_FragColor = modelTexture;
+    //gl_FragColor = vec4(n, 1.0);
+    gl_FragColor = lightColor * modelTexture;
+    //gl_FragColor = modelTexture;
+    }else {
+        //gl_FragColor = vec4(0.0,gl_FragCoord.z/2,0.0,1.0);
+        //gl_FragDepth = gl_FragCoord.z;
+    }
+    
 }

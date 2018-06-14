@@ -7,15 +7,12 @@ precision highp float;
 
 #version 130
 
-// uniform sampler2D fbo_texture;
+ uniform sampler2D fbo_texture;
 
-// varying vec4 texCoordVarying;
+ varying vec4 texCoordVarying;
 
 void main() 
 {
-    //float depthValue = texture(fbo_texture,texCoordVarying.xy).r;
-    //gl_FragColor = vec4(vec3(depthValue), 1.0);
     //gl_FragColor = texture2D(fbo_texture, texCoordVarying.xy);
-
+    gl_FragColor = vec4(1.0,0.0,0.0,1.0);
 }
-    

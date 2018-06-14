@@ -87,9 +87,9 @@ public:
 		GameObject *Tree[25];
 		for (int i = 0; i < 25; i++) {
 			Tree[i] = instanciate("Tree" + std::to_string(i));
-			Tree[i]->getComponent<Transform>()->setScale(vmml::Vector3f(1.5f, 1.5f, 1.5f));
+			Tree[i]->getComponent<Transform>()->setScale(vmml::Vector3f(3.5f, 3.5f, 3.5f));
 			Tree[i]->addComponent<TreeRenderer>();
-			Tree[i]->addComponent<SphereCollider>()->setRadius(1.1f);
+			//Tree[i]->addComponent<SphereCollider>()->setRadius(1.1f);
 			float x = (float(rand() % 1000) / 1000) * 91 - 46;
 			float z = (float(rand() % 1000) / 1000) * 102 - 144;
 			Tree[i]->getComponent<Transform>()->setPosition(vmml::Vector3f(x, 0.f, z));

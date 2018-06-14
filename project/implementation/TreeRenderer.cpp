@@ -32,8 +32,10 @@ public:
 		ShaderPtr shader;
 		if(customShader == nullptr){
 			shader = TheRenderer::Instance()->renderer->getObjects()->getShader("tree");
+			shader->setUniform("shadow",0.0);
 		} else {
-			shader = customShader;
+			shader = TheRenderer::Instance()->renderer->getObjects()->getShader("tree");
+			shader->setUniform("shadow",1.0);
 		}
 
 		vmml::Matrix4f modelMatrix = gameObject->getComponent<Transform>()->getTransformationMatrix();
@@ -43,6 +45,11 @@ public:
 		//ShaderPtr shader = TheRenderer::Instance()->renderer->getObjects()->getShader("tree");
 		vmml::Matrix4f viewMatrix = TheRenderer::Instance()->renderer->getObjects()->getCamera(cameraName)->getViewMatrix();
 		vmml::Matrix4f projectionMatrix = TheRenderer::Instance()->renderer->getObjects()->getCamera(cameraName)->getProjectionMatrix();
+
+		vmml::Matrix4f lightViewMatrix = TheRenderer::Instance()->renderer->getObjects()->getCamera("shadowCamera")->getViewMatrix();
+		vmml::Matrix4f lightProjectionMatrix = TheRenderer::Instance()->renderer->getObjects()->getCamera("shadowCamera")->getProjectionMatrix();
+		vmml::Matrix4f lightSpaceMatrix = lightProjectionMatrix * lightViewMatrix;
+
 
 		//Light Calculations
 		dayNightPulse = 0.5*(1 + cos(theTime.time / frequency));
@@ -54,8 +61,7 @@ public:
 
 		if (shader.get())
 		{
-			shader->setUniform("shadowMap", TheRenderer::Instance()->renderer->getObjects()->getDepthMap("depthMap"));
-
+			shader->setUniform("lightSpaceMatrix", lightSpaceMatrix);
 			shader->setUniform("ProjectionMatrix", projectionMatrix);
 			shader->setUniform("ViewMatrix", viewMatrix);
 			shader->setUniform("ModelMatrix", modelMatrix);
@@ -64,9 +70,6 @@ public:
 			vmml::Matrix3f normalMatrix;
 			vmml::compute_inverse(vmml::transpose(vmml::Matrix3f(modelMatrix)), normalMatrix);
 			shader->setUniform("NormalMatrix", normalMatrix);
-
-			vmml::Vector4f eyePos = vmml::Vector4f(0.0f, 0.0f, 10.0f, 1.0f);
-			shader->setUniform("EyePos", eyePos);
 
 			shader->setUniform("LightDirection", lightDirection);
 			shader->setUniform("DayNightPulse", dayNightPulse);

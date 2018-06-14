@@ -10,6 +10,9 @@ precision highp float;
 uniform mediump mat4 ViewMatrix;
 uniform mediump mat4 ModelMatrix;
 uniform mediump mat4 ProjectionMatrix;
+uniform highp mat4 lightSpaceMatrix;
+uniform highp float shadow;
+
 
 uniform mediump mat3 NormalMatrix;
 
@@ -34,16 +37,25 @@ varying mediump vec3 tangentVarying;    // tangent in world space
 
 varying mediump float DayNightPulseVarying; // Value for the day and night cycle
 varying mediump vec3 LightDirectionVarying; // Value for the direction light
+varying highp float shadowVarying;
+
 
 void main()
 {
-    posVarying = ModelMatrix * Position;
-    normalVarying = normalize(NormalMatrix * Normal);
-    tangentVarying = normalize(NormalMatrix * Tangent);
-    texCoordVarying = TexCoord;
-    fragPosLightSpace = ProjectionMatrix* ViewMatrix * Position;
-    DayNightPulseVarying = DayNightPulse;
-    LightDirectionVarying = LightDirection;
+	shadowVarying = shadow;
+	if(shadow>0.1){
+		gl_Position =  lightSpaceMatrix* ModelMatrix * Position; 
+	}else {
+		posVarying = ModelMatrix * Position;
+    	normalVarying = normalize(NormalMatrix * Normal);
+    	tangentVarying = normalize(NormalMatrix * Tangent);
+    	texCoordVarying = TexCoord;
+    	fragPosLightSpace = lightSpaceMatrix * Position;
+    	DayNightPulseVarying = DayNightPulse;
+    	LightDirectionVarying = LightDirection;
     
-    gl_Position = ProjectionMatrix * ViewMatrix * posVarying;
+    	gl_Position = ProjectionMatrix * ViewMatrix * posVarying;
+		}
+
+    
 }

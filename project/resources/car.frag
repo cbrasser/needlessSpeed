@@ -1,9 +1,3 @@
-/**
-$B_SHADER_VERSION
-#ifdef GL_ES
-precision highp float;
-#endif
-*/
 
 #version 130
 
@@ -12,8 +6,6 @@ uniform highp mat4 ModelMatrix;
 uniform highp mat4 ProjectionMatrix;
 
 uniform highp mat3 NormalMatrix;
-
-uniform highp vec4 LightPos;
 
 varying highp float DayNightPulseVarying; // Value for the Day and Night Cycle
 varying highp vec3 LightDirectionVarying; // Value for light direction
@@ -29,6 +21,7 @@ varying highp vec4 posVarying;        // pos in world space
 varying highp vec3 normalVarying;     // normal in world space
 varying highp vec3 tangentVarying;    // tangent in world space
 varying highp vec4 fragPosLightSpace;
+varying highp float shadowVarying;
 
 float ShadowCalculation(vec4 fragPosLightSpace)
 {
@@ -48,7 +41,8 @@ float ShadowCalculation(vec4 fragPosLightSpace)
 
 void main()
 { 
-    highp vec4 pos = posVarying;
+    if(shadowVarying<=0.1){
+        highp vec4 pos = posVarying;
     highp vec3 n = normalize(normalVarying);   
 
     highp vec3 l = normalize(LightDirectionVarying);
@@ -72,8 +66,13 @@ void main()
         }   
     // highp vec3 lighting = (ambient + (1.0 - shadow) * (diffuse + specular)) * color;    
 
-	//gl_FragColor = vec4(n, 1.0);
-	gl_FragColor = lightColor * modelTexture;
-	//gl_FragColor = modelTexture;
+    //gl_FragColor = vec4(n, 1.0);
+    gl_FragColor = lightColor * modelTexture;
+    //gl_FragColor = modelTexture;
+    } else {
+        //gl_FragColor = vec4(fragPosLightSpace.z,0.0,0.0,1.0);
+        //gl_FragDepth = gl_FragCoord.z;
+    }
+    
 }
 
