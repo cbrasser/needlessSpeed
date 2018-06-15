@@ -6,19 +6,20 @@ The initial goal of the project was to implement a top-down racing game with the
 
 ![img](img.png)
 
-As the project went further, we tried out multiple camera settings and came to the conclusion, that a more '3rd person'-ish camera angle works better for our game setting. The environment of the game is defined by a cartoonish look, which we achieved by implementing toon shaders for our assets. For the race track, we aimed for an environment with a lot of green and nature, contrasting the asphalt of the track. All of the 3D models and assets have been painstakingly hand-crafted by ourselves to fit our needs. Some additional graphical features we wanted to implement are:
+As the project went further, we tried out multiple camera settings and came to the conclusion, that a more '3rd person'-ish camera angle works better for our game setting. The environment of the game is defined by a cartoonish look, which we achieved by implementing toon shaders for our assets. For the race track, we aimed for an environment with a lot of green and nature, contrasting the asphalt of the track. All of the 3D models and assets have been painstakingly hand-crafted by ourselves to fit our needs. 
+The graphical features we implemented are:
 
-* Day & Night cycle
-
-* Shadows
-
-* Screen space ambient occlusion
-
-* Volumetric frong lights
-
-* Particles
-
-* Wheel-turning animation
+*   Day & Night cycle
+    
+*   Shadow Mapping
+    
+*   Xtoon Toon Shader
+    
+*   Particles
+    
+*   Wheel-turning animation
+    
+*   Self made models
 
 ## Gameplay
 
@@ -26,7 +27,7 @@ The player is the only moving entity in the game as the car. The goal of the gam
 
 ## Graphical Features & Techniques
 
-A particle system that follows the car has been implemented. The particle system spawns particles (which are rendered as small quads) based on the cars current speed and position, which all have an individual lifecycle. 
+A particle system that follows the car has been implemented. The particle system spawns particles (which are rendered as small quads) based on the cars current speed and position, which all have an individual lifecycle. The Camera is following the cars position and rotation with an additional lerp both in translation as well as rotation for a smooth camera movement. The cars wheels are animated along two axes dependend on the cars rotation and velocity. As mentioned, the objects get colored by a toon shader. The sun is implemented as a directional light that traverses across the scene as day & night pass by. This movement in combination with a colorLUT texture lookup provides for nice time-dependent colors.
 
 ## Problems
 
